@@ -1,0 +1,11 @@
+{
+    "common": {
+        "save": "Lưu",
+        "cancel": "Hủy"
+    },
+    "settings": {
+        "title": "Cài đặt",
+        "description": "Quản lý dữ liệu và tùy chọn ứng dụng của bạn.",
+        "language": "Ngôn ngữ"
+    }
+}

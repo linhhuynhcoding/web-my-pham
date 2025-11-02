@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package api;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+import "validate/validate.proto";
+import "data.proto";
+
+option go_package = "github.com/linhhuynhcoding/web-my-pham/server/api";
+
+service Service {
+  // Login
+  rpc Login(LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      post: "/api/login"
+      body: "*"
+    };
+  }
+}
+
+message LoginRequest {
+  string password = 1;
+}
+message LoginResponse {
+  string access_token = 1;
+}

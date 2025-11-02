@@ -1,0 +1,16 @@
+version: v1
+categories:
+  - name: GOOGLE
+    use:
+      - FILE_OPTIONS
+      - FILE_LOWER_SNAKE_CASE
+      - PACKAGE_VERSION_WELL_FORMED
+      - PACKAGE_SAME_DIRECTORY
+  - name: STYLE
+    use:
+      - ENUM_VALUE_PREFIX
+      - MESSAGE_NAMES
+      - SERVICE_SUFFIX
+      - RPC_NAMES
+    except:
+      - RPC_NAMES # customize if needed
