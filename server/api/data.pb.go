@@ -99,6 +99,58 @@ func (x *Pagination) GetHasNextPage() bool {
 	return false
 }
 
+type User struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Email         string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *User) Reset() {
+	*x = User{}
+	mi := &file_data_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *User) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*User) ProtoMessage() {}
+
+func (x *User) ProtoReflect() protoreflect.Message {
+	mi := &file_data_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use User.ProtoReflect.Descriptor instead.
+func (*User) Descriptor() ([]byte, []int) {
+	return file_data_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *User) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *User) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
 var File_data_proto protoreflect.FileDescriptor
 
 const file_data_proto_rawDesc = "" +
@@ -111,7 +163,10 @@ const file_data_proto_rawDesc = "" +
 	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\x12\x1b\n" +
 	"\tlast_page\x18\x03 \x01(\x05R\blastPage\x12\x14\n" +
 	"\x05total\x18\x04 \x01(\x05R\x05total\x12\"\n" +
-	"\rhas_next_page\x18\x05 \x01(\bR\vhasNextPageB3Z1github.com/linhhuynhcoding/web-my-pham/server/apib\x06proto3"
+	"\rhas_next_page\x18\x05 \x01(\bR\vhasNextPage\"0\n" +
+	"\x04User\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
+	"\x05email\x18\x03 \x01(\tR\x05emailB3Z1github.com/linhhuynhcoding/web-my-pham/server/apib\x06proto3"
 
 var (
 	file_data_proto_rawDescOnce sync.Once
@@ -125,9 +180,10 @@ func file_data_proto_rawDescGZIP() []byte {
 	return file_data_proto_rawDescData
 }
 
-var file_data_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_data_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_data_proto_goTypes = []any{
 	(*Pagination)(nil), // 0: api.Pagination
+	(*User)(nil),       // 1: api.User
 }
 var file_data_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -148,7 +204,7 @@ func file_data_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_data_proto_rawDesc), len(file_data_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   1,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

@@ -4,12 +4,14 @@ go 1.24.6
 
 require (
 	github.com/envoyproxy/protoc-gen-validate v1.2.1
+	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.2
 	github.com/jackc/pgx/v5 v5.7.5
 	github.com/rs/cors v1.11.1
 	github.com/spf13/viper v1.20.1
 	go.uber.org/fx v1.24.0
 	go.uber.org/zap v1.27.0
+	golang.org/x/crypto v0.40.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20250818200422-3122310a409c
 	google.golang.org/grpc v1.75.0
 	google.golang.org/protobuf v1.36.7
@@ -30,7 +32,6 @@ require (
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.uber.org/dig v1.19.0 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
-	golang.org/x/crypto v0.40.0 // indirect
 	golang.org/x/net v0.42.0 // indirect
 	golang.org/x/sync v0.16.0 // indirect
 	golang.org/x/sys v0.34.0 // indirect

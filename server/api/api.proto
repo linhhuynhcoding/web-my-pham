@@ -18,11 +18,29 @@ service Service {
       body: "*"
     };
   }
+  // Register
+  rpc Register(RegisterRequest) returns (RegisterResponse) {
+    option (google.api.http) = {
+      post: "/api/register"
+      body: "*"
+    };
+  }
 }
 
 message LoginRequest {
-  string password = 1;
+  string email = 1 [(validate.rules).string.email = true]; 
+  string password  = 2  [(validate.rules).string = {min_len: 1}];
 }
 message LoginResponse {
   string access_token = 1;
+  User user = 2;
 }
+
+message RegisterRequest{
+  string email = 1 [(validate.rules).string.email = true]; 
+  string password  = 2  [(validate.rules).string = {min_len: 1}];
+  string confirm_password  = 3  [(validate.rules).string = {min_len: 1}];
+  string name = 4 [(validate.rules).string = {min_len: 1}];
+}
+
+message RegisterResponse{}

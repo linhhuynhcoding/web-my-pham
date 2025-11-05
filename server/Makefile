@@ -14,7 +14,7 @@ proto:
 		--go_out=$(OUT_DIR) --go_opt=paths=source_relative \
 		--go-grpc_out=$(OUT_DIR) --go-grpc_opt=paths=source_relative \
 		--grpc-gateway_out=$(OUT_DIR) --grpc-gateway_opt=paths=source_relative \
-		--validate_out="lang=go:$(OUT_DIR)" \
+		--validate_out="lang=go,paths=source_relative:$(OUT_DIR)" \
 		$(PROTO_FILES)
 
 doc:

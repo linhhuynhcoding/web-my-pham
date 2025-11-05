@@ -20,6 +20,8 @@ type Config struct {
 
 	Password string `mapstructure:"PASSWORD"`
 	Token    string `mapstructure:"TOKEN"`
+
+	TokenConfig TokenConfig `mapstructure:"TOKEN_CONFIG"`
 }
 
 type CoinMarketCapConfig struct {
@@ -27,7 +29,14 @@ type CoinMarketCapConfig struct {
 	ApiUrl string `mapstructure:"API_URL"`
 }
 
-func NewConfig() Config {
+type TokenConfig struct {
+	AccessSecretKey string `mapstructure:"ACCESS_SECRET_KEY"`
+	RefresSecretKey string `mapstructure:"REFRESH_SECRET_KEY"`
+	AccessTokenTTL  int    `mapstructure:"ACCESS_TOKEN_TTL"`
+	RefreshTokenTTL int    `mapstructure:"REFRESH_TOKEN_TTL"`
+}
+
+func NewConfig() *Config {
 	configPath := os.Getenv("CONFIG_PATH")
 	if configPath == "" {
 		configPath = "./"
@@ -37,7 +46,7 @@ func NewConfig() Config {
 	if err != nil {
 		panic(err)
 	}
-	return config
+	return &config
 }
 
 func LoadDefaultConfig(cfg *Config) {

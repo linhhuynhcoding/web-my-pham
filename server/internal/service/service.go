@@ -12,11 +12,11 @@ import (
 type Service struct {
 	api.UnimplementedServiceServer
 	logger *zap.Logger
-	cfg    config.Config
+	cfg    *config.Config
 	store  repository.Store
 }
 
-func NewService(ctx context.Context, logger *zap.Logger, cfg config.Config, store repository.Store) *Service {
+func NewService(ctx context.Context, logger *zap.Logger, cfg *config.Config, store repository.Store) *Service {
 	return &Service{
 		logger: logger,
 		cfg:    cfg,

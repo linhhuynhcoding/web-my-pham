@@ -16,3 +16,8 @@ message Pagination {
     int32 total = 4;
     bool has_next_page = 5;
 }
+
+message User {
+    string name = 2;
+    string email = 3;
+}
