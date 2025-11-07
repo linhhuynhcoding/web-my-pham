@@ -25,6 +25,55 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type ProductOrderBy int32
+
+const (
+	ProductOrderBy_BEST_SELLER ProductOrderBy = 0
+	ProductOrderBy_PRICE_ASC   ProductOrderBy = 1
+	ProductOrderBy_PRICE_DESC  ProductOrderBy = 2
+)
+
+// Enum value maps for ProductOrderBy.
+var (
+	ProductOrderBy_name = map[int32]string{
+		0: "BEST_SELLER",
+		1: "PRICE_ASC",
+		2: "PRICE_DESC",
+	}
+	ProductOrderBy_value = map[string]int32{
+		"BEST_SELLER": 0,
+		"PRICE_ASC":   1,
+		"PRICE_DESC":  2,
+	}
+)
+
+func (x ProductOrderBy) Enum() *ProductOrderBy {
+	p := new(ProductOrderBy)
+	*p = x
+	return p
+}
+
+func (x ProductOrderBy) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ProductOrderBy) Descriptor() protoreflect.EnumDescriptor {
+	return file_api_proto_enumTypes[0].Descriptor()
+}
+
+func (ProductOrderBy) Type() protoreflect.EnumType {
+	return &file_api_proto_enumTypes[0]
+}
+
+func (x ProductOrderBy) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ProductOrderBy.Descriptor instead.
+func (ProductOrderBy) EnumDescriptor() ([]byte, []int) {
+	return file_api_proto_rawDescGZIP(), []int{0}
+}
+
 type LoginRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
@@ -233,6 +282,622 @@ func (*RegisterResponse) Descriptor() ([]byte, []int) {
 	return file_api_proto_rawDescGZIP(), []int{3}
 }
 
+type LoadHomeScreenRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LoadHomeScreenRequest) Reset() {
+	*x = LoadHomeScreenRequest{}
+	mi := &file_api_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LoadHomeScreenRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoadHomeScreenRequest) ProtoMessage() {}
+
+func (x *LoadHomeScreenRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoadHomeScreenRequest.ProtoReflect.Descriptor instead.
+func (*LoadHomeScreenRequest) Descriptor() ([]byte, []int) {
+	return file_api_proto_rawDescGZIP(), []int{4}
+}
+
+type LoadHomeScreenResponse struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	BestsellerProducts []*Product             `protobuf:"bytes,1,rep,name=bestseller_products,json=bestsellerProducts,proto3" json:"bestseller_products,omitempty"`
+	TopSearchProducts  []*Product             `protobuf:"bytes,2,rep,name=top_search_products,json=topSearchProducts,proto3" json:"top_search_products,omitempty"`
+	Categories         []*Category            `protobuf:"bytes,3,rep,name=categories,proto3" json:"categories,omitempty"`
+	Brands             []*Brand               `protobuf:"bytes,4,rep,name=brands,proto3" json:"brands,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *LoadHomeScreenResponse) Reset() {
+	*x = LoadHomeScreenResponse{}
+	mi := &file_api_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LoadHomeScreenResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoadHomeScreenResponse) ProtoMessage() {}
+
+func (x *LoadHomeScreenResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoadHomeScreenResponse.ProtoReflect.Descriptor instead.
+func (*LoadHomeScreenResponse) Descriptor() ([]byte, []int) {
+	return file_api_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *LoadHomeScreenResponse) GetBestsellerProducts() []*Product {
+	if x != nil {
+		return x.BestsellerProducts
+	}
+	return nil
+}
+
+func (x *LoadHomeScreenResponse) GetTopSearchProducts() []*Product {
+	if x != nil {
+		return x.TopSearchProducts
+	}
+	return nil
+}
+
+func (x *LoadHomeScreenResponse) GetCategories() []*Category {
+	if x != nil {
+		return x.Categories
+	}
+	return nil
+}
+
+func (x *LoadHomeScreenResponse) GetBrands() []*Brand {
+	if x != nil {
+		return x.Brands
+	}
+	return nil
+}
+
+type PriceRange struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Min           float64                `protobuf:"fixed64,1,opt,name=min,proto3" json:"min,omitempty"`
+	Max           float64                `protobuf:"fixed64,2,opt,name=max,proto3" json:"max,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PriceRange) Reset() {
+	*x = PriceRange{}
+	mi := &file_api_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PriceRange) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PriceRange) ProtoMessage() {}
+
+func (x *PriceRange) ProtoReflect() protoreflect.Message {
+	mi := &file_api_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PriceRange.ProtoReflect.Descriptor instead.
+func (*PriceRange) Descriptor() ([]byte, []int) {
+	return file_api_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *PriceRange) GetMin() float64 {
+	if x != nil {
+		return x.Min
+	}
+	return 0
+}
+
+func (x *PriceRange) GetMax() float64 {
+	if x != nil {
+		return x.Max
+	}
+	return 0
+}
+
+type ProductFilter struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PriceRange    *PriceRange            `protobuf:"bytes,1,opt,name=price_range,json=priceRange,proto3" json:"price_range,omitempty"`
+	BrandIds      []int32                `protobuf:"varint,2,rep,packed,name=brand_ids,json=brandIds,proto3" json:"brand_ids,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ProductFilter) Reset() {
+	*x = ProductFilter{}
+	mi := &file_api_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ProductFilter) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ProductFilter) ProtoMessage() {}
+
+func (x *ProductFilter) ProtoReflect() protoreflect.Message {
+	mi := &file_api_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ProductFilter.ProtoReflect.Descriptor instead.
+func (*ProductFilter) Descriptor() ([]byte, []int) {
+	return file_api_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *ProductFilter) GetPriceRange() *PriceRange {
+	if x != nil {
+		return x.PriceRange
+	}
+	return nil
+}
+
+func (x *ProductFilter) GetBrandIds() []int32 {
+	if x != nil {
+		return x.BrandIds
+	}
+	return nil
+}
+
+type LoadProductsByCategoryRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CategoryId    int32                  `protobuf:"varint,1,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`
+	Filter        *ProductFilter         `protobuf:"bytes,2,opt,name=filter,proto3" json:"filter,omitempty"`
+	OrderBy       ProductOrderBy         `protobuf:"varint,3,opt,name=order_by,json=orderBy,proto3,enum=api.ProductOrderBy" json:"order_by,omitempty"`
+	Pagination    *Pagination            `protobuf:"bytes,4,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LoadProductsByCategoryRequest) Reset() {
+	*x = LoadProductsByCategoryRequest{}
+	mi := &file_api_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LoadProductsByCategoryRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoadProductsByCategoryRequest) ProtoMessage() {}
+
+func (x *LoadProductsByCategoryRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoadProductsByCategoryRequest.ProtoReflect.Descriptor instead.
+func (*LoadProductsByCategoryRequest) Descriptor() ([]byte, []int) {
+	return file_api_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *LoadProductsByCategoryRequest) GetCategoryId() int32 {
+	if x != nil {
+		return x.CategoryId
+	}
+	return 0
+}
+
+func (x *LoadProductsByCategoryRequest) GetFilter() *ProductFilter {
+	if x != nil {
+		return x.Filter
+	}
+	return nil
+}
+
+func (x *LoadProductsByCategoryRequest) GetOrderBy() ProductOrderBy {
+	if x != nil {
+		return x.OrderBy
+	}
+	return ProductOrderBy_BEST_SELLER
+}
+
+func (x *LoadProductsByCategoryRequest) GetPagination() *Pagination {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+type LoadProductsByCategoryResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Products      []*Product             `protobuf:"bytes,1,rep,name=products,proto3" json:"products,omitempty"`
+	Pagination    *Pagination            `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	Brands        []*Brand               `protobuf:"bytes,3,rep,name=brands,proto3" json:"brands,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LoadProductsByCategoryResponse) Reset() {
+	*x = LoadProductsByCategoryResponse{}
+	mi := &file_api_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LoadProductsByCategoryResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoadProductsByCategoryResponse) ProtoMessage() {}
+
+func (x *LoadProductsByCategoryResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoadProductsByCategoryResponse.ProtoReflect.Descriptor instead.
+func (*LoadProductsByCategoryResponse) Descriptor() ([]byte, []int) {
+	return file_api_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *LoadProductsByCategoryResponse) GetProducts() []*Product {
+	if x != nil {
+		return x.Products
+	}
+	return nil
+}
+
+func (x *LoadProductsByCategoryResponse) GetPagination() *Pagination {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+func (x *LoadProductsByCategoryResponse) GetBrands() []*Brand {
+	if x != nil {
+		return x.Brands
+	}
+	return nil
+}
+
+type LoadProductDetailPageRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ProductId     int32                  `protobuf:"varint,1,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LoadProductDetailPageRequest) Reset() {
+	*x = LoadProductDetailPageRequest{}
+	mi := &file_api_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LoadProductDetailPageRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoadProductDetailPageRequest) ProtoMessage() {}
+
+func (x *LoadProductDetailPageRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoadProductDetailPageRequest.ProtoReflect.Descriptor instead.
+func (*LoadProductDetailPageRequest) Descriptor() ([]byte, []int) {
+	return file_api_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *LoadProductDetailPageRequest) GetProductId() int32 {
+	if x != nil {
+		return x.ProductId
+	}
+	return 0
+}
+
+type LoadProductDetailPageResponse struct {
+	state                     protoimpl.MessageState `protogen:"open.v1"`
+	Product                   *Product               `protobuf:"bytes,1,opt,name=product,proto3" json:"product,omitempty"`
+	OtherSameCategoryProducts []*Product             `protobuf:"bytes,2,rep,name=other_same_category_products,json=otherSameCategoryProducts,proto3" json:"other_same_category_products,omitempty"` // Renamed for clarity
+	OtherSameBrandProducts    []*Product             `protobuf:"bytes,3,rep,name=other_same_brand_products,json=otherSameBrandProducts,proto3" json:"other_same_brand_products,omitempty"`          // Renamed for clarity
+	unknownFields             protoimpl.UnknownFields
+	sizeCache                 protoimpl.SizeCache
+}
+
+func (x *LoadProductDetailPageResponse) Reset() {
+	*x = LoadProductDetailPageResponse{}
+	mi := &file_api_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LoadProductDetailPageResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoadProductDetailPageResponse) ProtoMessage() {}
+
+func (x *LoadProductDetailPageResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoadProductDetailPageResponse.ProtoReflect.Descriptor instead.
+func (*LoadProductDetailPageResponse) Descriptor() ([]byte, []int) {
+	return file_api_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *LoadProductDetailPageResponse) GetProduct() *Product {
+	if x != nil {
+		return x.Product
+	}
+	return nil
+}
+
+func (x *LoadProductDetailPageResponse) GetOtherSameCategoryProducts() []*Product {
+	if x != nil {
+		return x.OtherSameCategoryProducts
+	}
+	return nil
+}
+
+func (x *LoadProductDetailPageResponse) GetOtherSameBrandProducts() []*Product {
+	if x != nil {
+		return x.OtherSameBrandProducts
+	}
+	return nil
+}
+
+type LoadProfileInfoPageRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LoadProfileInfoPageRequest) Reset() {
+	*x = LoadProfileInfoPageRequest{}
+	mi := &file_api_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LoadProfileInfoPageRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoadProfileInfoPageRequest) ProtoMessage() {}
+
+func (x *LoadProfileInfoPageRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoadProfileInfoPageRequest.ProtoReflect.Descriptor instead.
+func (*LoadProfileInfoPageRequest) Descriptor() ([]byte, []int) {
+	return file_api_proto_rawDescGZIP(), []int{12}
+}
+
+type LoadProfileInfoPageResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	User          *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LoadProfileInfoPageResponse) Reset() {
+	*x = LoadProfileInfoPageResponse{}
+	mi := &file_api_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LoadProfileInfoPageResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoadProfileInfoPageResponse) ProtoMessage() {}
+
+func (x *LoadProfileInfoPageResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoadProfileInfoPageResponse.ProtoReflect.Descriptor instead.
+func (*LoadProfileInfoPageResponse) Descriptor() ([]byte, []int) {
+	return file_api_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *LoadProfileInfoPageResponse) GetUser() *User {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
+type LoadUserOrderPageRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Pagination    *Pagination            `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"` // Request pagination details for orders
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LoadUserOrderPageRequest) Reset() {
+	*x = LoadUserOrderPageRequest{}
+	mi := &file_api_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LoadUserOrderPageRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoadUserOrderPageRequest) ProtoMessage() {}
+
+func (x *LoadUserOrderPageRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoadUserOrderPageRequest.ProtoReflect.Descriptor instead.
+func (*LoadUserOrderPageRequest) Descriptor() ([]byte, []int) {
+	return file_api_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *LoadUserOrderPageRequest) GetPagination() *Pagination {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+type LoadUserOrderPageResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Orders        []*Order               `protobuf:"bytes,1,rep,name=orders,proto3" json:"orders,omitempty"`
+	Pagination    *Pagination            `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LoadUserOrderPageResponse) Reset() {
+	*x = LoadUserOrderPageResponse{}
+	mi := &file_api_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LoadUserOrderPageResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoadUserOrderPageResponse) ProtoMessage() {}
+
+func (x *LoadUserOrderPageResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoadUserOrderPageResponse.ProtoReflect.Descriptor instead.
+func (*LoadUserOrderPageResponse) Descriptor() ([]byte, []int) {
+	return file_api_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *LoadUserOrderPageResponse) GetOrders() []*Order {
+	if x != nil {
+		return x.Orders
+	}
+	return nil
+}
+
+func (x *LoadUserOrderPageResponse) GetPagination() *Pagination {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
 var File_api_proto protoreflect.FileDescriptor
 
 const file_api_proto_rawDesc = "" +
@@ -250,11 +915,73 @@ const file_api_proto_rawDesc = "" +
 	"\bpassword\x18\x02 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\bpassword\x122\n" +
 	"\x10confirm_password\x18\x03 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\x0fconfirmPassword\x12\x1b\n" +
 	"\x04name\x18\x04 \x01(\tB\a\xfaB\x04r\x02\x10\x01R\x04name\"\x12\n" +
-	"\x10RegisterResponse2\xa3\x01\n" +
+	"\x10RegisterResponse\"\x17\n" +
+	"\x15LoadHomeScreenRequest\"\xe8\x01\n" +
+	"\x16LoadHomeScreenResponse\x12=\n" +
+	"\x13bestseller_products\x18\x01 \x03(\v2\f.api.ProductR\x12bestsellerProducts\x12<\n" +
+	"\x13top_search_products\x18\x02 \x03(\v2\f.api.ProductR\x11topSearchProducts\x12-\n" +
+	"\n" +
+	"categories\x18\x03 \x03(\v2\r.api.CategoryR\n" +
+	"categories\x12\"\n" +
+	"\x06brands\x18\x04 \x03(\v2\n" +
+	".api.BrandR\x06brands\"0\n" +
+	"\n" +
+	"PriceRange\x12\x10\n" +
+	"\x03min\x18\x01 \x01(\x01R\x03min\x12\x10\n" +
+	"\x03max\x18\x02 \x01(\x01R\x03max\"^\n" +
+	"\rProductFilter\x120\n" +
+	"\vprice_range\x18\x01 \x01(\v2\x0f.api.PriceRangeR\n" +
+	"priceRange\x12\x1b\n" +
+	"\tbrand_ids\x18\x02 \x03(\x05R\bbrandIds\"\xd6\x01\n" +
+	"\x1dLoadProductsByCategoryRequest\x12(\n" +
+	"\vcategory_id\x18\x01 \x01(\x05B\a\xfaB\x04\x1a\x02 \x00R\n" +
+	"categoryId\x12*\n" +
+	"\x06filter\x18\x02 \x01(\v2\x12.api.ProductFilterR\x06filter\x12.\n" +
+	"\border_by\x18\x03 \x01(\x0e2\x13.api.ProductOrderByR\aorderBy\x12/\n" +
+	"\n" +
+	"pagination\x18\x04 \x01(\v2\x0f.api.PaginationR\n" +
+	"pagination\"\x9f\x01\n" +
+	"\x1eLoadProductsByCategoryResponse\x12(\n" +
+	"\bproducts\x18\x01 \x03(\v2\f.api.ProductR\bproducts\x12/\n" +
+	"\n" +
+	"pagination\x18\x02 \x01(\v2\x0f.api.PaginationR\n" +
+	"pagination\x12\"\n" +
+	"\x06brands\x18\x03 \x03(\v2\n" +
+	".api.BrandR\x06brands\"F\n" +
+	"\x1cLoadProductDetailPageRequest\x12&\n" +
+	"\n" +
+	"product_id\x18\x01 \x01(\x05B\a\xfaB\x04\x1a\x02 \x00R\tproductId\"\xdf\x01\n" +
+	"\x1dLoadProductDetailPageResponse\x12&\n" +
+	"\aproduct\x18\x01 \x01(\v2\f.api.ProductR\aproduct\x12M\n" +
+	"\x1cother_same_category_products\x18\x02 \x03(\v2\f.api.ProductR\x19otherSameCategoryProducts\x12G\n" +
+	"\x19other_same_brand_products\x18\x03 \x03(\v2\f.api.ProductR\x16otherSameBrandProducts\"\x1c\n" +
+	"\x1aLoadProfileInfoPageRequest\"<\n" +
+	"\x1bLoadProfileInfoPageResponse\x12\x1d\n" +
+	"\x04user\x18\x01 \x01(\v2\t.api.UserR\x04user\"K\n" +
+	"\x18LoadUserOrderPageRequest\x12/\n" +
+	"\n" +
+	"pagination\x18\x01 \x01(\v2\x0f.api.PaginationR\n" +
+	"pagination\"p\n" +
+	"\x19LoadUserOrderPageResponse\x12\"\n" +
+	"\x06orders\x18\x01 \x03(\v2\n" +
+	".api.OrderR\x06orders\x12/\n" +
+	"\n" +
+	"pagination\x18\x02 \x01(\v2\x0f.api.PaginationR\n" +
+	"pagination*@\n" +
+	"\x0eProductOrderBy\x12\x0f\n" +
+	"\vBEST_SELLER\x10\x00\x12\r\n" +
+	"\tPRICE_ASC\x10\x01\x12\x0e\n" +
+	"\n" +
+	"PRICE_DESC\x10\x022\xfb\x05\n" +
 	"\aService\x12E\n" +
 	"\x05Login\x12\x11.api.LoginRequest\x1a\x12.api.LoginResponse\"\x15\x82\xd3\xe4\x93\x02\x0f:\x01*\"\n" +
 	"/api/login\x12Q\n" +
-	"\bRegister\x12\x14.api.RegisterRequest\x1a\x15.api.RegisterResponse\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/api/registerB3Z1github.com/linhhuynhcoding/web-my-pham/server/apib\x06proto3"
+	"\bRegister\x12\x14.api.RegisterRequest\x1a\x15.api.RegisterResponse\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/api/register\x12\\\n" +
+	"\x0eLoadHomeScreen\x12\x1a.api.LoadHomeScreenRequest\x1a\x1b.api.LoadHomeScreenResponse\"\x11\x82\xd3\xe4\x93\x02\v\x12\t/api/home\x12\x91\x01\n" +
+	"\x16LoadProductsByCategory\x12\".api.LoadProductsByCategoryRequest\x1a#.api.LoadProductsByCategoryResponse\".\x82\xd3\xe4\x93\x02(\x12&/api/categories/{category_id}/products\x12\x82\x01\n" +
+	"\x15LoadProductDetailPage\x12!.api.LoadProductDetailPageRequest\x1a\".api.LoadProductDetailPageResponse\"\"\x82\xd3\xe4\x93\x02\x1c\x12\x1a/api/products/{product_id}\x12n\n" +
+	"\x13LoadProfileInfoPage\x12\x1f.api.LoadProfileInfoPageRequest\x1a .api.LoadProfileInfoPageResponse\"\x14\x82\xd3\xe4\x93\x02\x0e\x12\f/api/profile\x12o\n" +
+	"\x11LoadUserOrderPage\x12\x1d.api.LoadUserOrderPageRequest\x1a\x1e.api.LoadUserOrderPageResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\x12\x13/api/orders_historyB3Z1github.com/linhhuynhcoding/web-my-pham/server/apib\x06proto3"
 
 var (
 	file_api_proto_rawDescOnce sync.Once
@@ -268,25 +995,72 @@ func file_api_proto_rawDescGZIP() []byte {
 	return file_api_proto_rawDescData
 }
 
-var file_api_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_api_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_api_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_api_proto_goTypes = []any{
-	(*LoginRequest)(nil),     // 0: api.LoginRequest
-	(*LoginResponse)(nil),    // 1: api.LoginResponse
-	(*RegisterRequest)(nil),  // 2: api.RegisterRequest
-	(*RegisterResponse)(nil), // 3: api.RegisterResponse
-	(*User)(nil),             // 4: api.User
+	(ProductOrderBy)(0),                    // 0: api.ProductOrderBy
+	(*LoginRequest)(nil),                   // 1: api.LoginRequest
+	(*LoginResponse)(nil),                  // 2: api.LoginResponse
+	(*RegisterRequest)(nil),                // 3: api.RegisterRequest
+	(*RegisterResponse)(nil),               // 4: api.RegisterResponse
+	(*LoadHomeScreenRequest)(nil),          // 5: api.LoadHomeScreenRequest
+	(*LoadHomeScreenResponse)(nil),         // 6: api.LoadHomeScreenResponse
+	(*PriceRange)(nil),                     // 7: api.PriceRange
+	(*ProductFilter)(nil),                  // 8: api.ProductFilter
+	(*LoadProductsByCategoryRequest)(nil),  // 9: api.LoadProductsByCategoryRequest
+	(*LoadProductsByCategoryResponse)(nil), // 10: api.LoadProductsByCategoryResponse
+	(*LoadProductDetailPageRequest)(nil),   // 11: api.LoadProductDetailPageRequest
+	(*LoadProductDetailPageResponse)(nil),  // 12: api.LoadProductDetailPageResponse
+	(*LoadProfileInfoPageRequest)(nil),     // 13: api.LoadProfileInfoPageRequest
+	(*LoadProfileInfoPageResponse)(nil),    // 14: api.LoadProfileInfoPageResponse
+	(*LoadUserOrderPageRequest)(nil),       // 15: api.LoadUserOrderPageRequest
+	(*LoadUserOrderPageResponse)(nil),      // 16: api.LoadUserOrderPageResponse
+	(*User)(nil),                           // 17: api.User
+	(*Product)(nil),                        // 18: api.Product
+	(*Category)(nil),                       // 19: api.Category
+	(*Brand)(nil),                          // 20: api.Brand
+	(*Pagination)(nil),                     // 21: api.Pagination
+	(*Order)(nil),                          // 22: api.Order
 }
 var file_api_proto_depIdxs = []int32{
-	4, // 0: api.LoginResponse.user:type_name -> api.User
-	0, // 1: api.Service.Login:input_type -> api.LoginRequest
-	2, // 2: api.Service.Register:input_type -> api.RegisterRequest
-	1, // 3: api.Service.Login:output_type -> api.LoginResponse
-	3, // 4: api.Service.Register:output_type -> api.RegisterResponse
-	3, // [3:5] is the sub-list for method output_type
-	1, // [1:3] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	17, // 0: api.LoginResponse.user:type_name -> api.User
+	18, // 1: api.LoadHomeScreenResponse.bestseller_products:type_name -> api.Product
+	18, // 2: api.LoadHomeScreenResponse.top_search_products:type_name -> api.Product
+	19, // 3: api.LoadHomeScreenResponse.categories:type_name -> api.Category
+	20, // 4: api.LoadHomeScreenResponse.brands:type_name -> api.Brand
+	7,  // 5: api.ProductFilter.price_range:type_name -> api.PriceRange
+	8,  // 6: api.LoadProductsByCategoryRequest.filter:type_name -> api.ProductFilter
+	0,  // 7: api.LoadProductsByCategoryRequest.order_by:type_name -> api.ProductOrderBy
+	21, // 8: api.LoadProductsByCategoryRequest.pagination:type_name -> api.Pagination
+	18, // 9: api.LoadProductsByCategoryResponse.products:type_name -> api.Product
+	21, // 10: api.LoadProductsByCategoryResponse.pagination:type_name -> api.Pagination
+	20, // 11: api.LoadProductsByCategoryResponse.brands:type_name -> api.Brand
+	18, // 12: api.LoadProductDetailPageResponse.product:type_name -> api.Product
+	18, // 13: api.LoadProductDetailPageResponse.other_same_category_products:type_name -> api.Product
+	18, // 14: api.LoadProductDetailPageResponse.other_same_brand_products:type_name -> api.Product
+	17, // 15: api.LoadProfileInfoPageResponse.user:type_name -> api.User
+	21, // 16: api.LoadUserOrderPageRequest.pagination:type_name -> api.Pagination
+	22, // 17: api.LoadUserOrderPageResponse.orders:type_name -> api.Order
+	21, // 18: api.LoadUserOrderPageResponse.pagination:type_name -> api.Pagination
+	1,  // 19: api.Service.Login:input_type -> api.LoginRequest
+	3,  // 20: api.Service.Register:input_type -> api.RegisterRequest
+	5,  // 21: api.Service.LoadHomeScreen:input_type -> api.LoadHomeScreenRequest
+	9,  // 22: api.Service.LoadProductsByCategory:input_type -> api.LoadProductsByCategoryRequest
+	11, // 23: api.Service.LoadProductDetailPage:input_type -> api.LoadProductDetailPageRequest
+	13, // 24: api.Service.LoadProfileInfoPage:input_type -> api.LoadProfileInfoPageRequest
+	15, // 25: api.Service.LoadUserOrderPage:input_type -> api.LoadUserOrderPageRequest
+	2,  // 26: api.Service.Login:output_type -> api.LoginResponse
+	4,  // 27: api.Service.Register:output_type -> api.RegisterResponse
+	6,  // 28: api.Service.LoadHomeScreen:output_type -> api.LoadHomeScreenResponse
+	10, // 29: api.Service.LoadProductsByCategory:output_type -> api.LoadProductsByCategoryResponse
+	12, // 30: api.Service.LoadProductDetailPage:output_type -> api.LoadProductDetailPageResponse
+	14, // 31: api.Service.LoadProfileInfoPage:output_type -> api.LoadProfileInfoPageResponse
+	16, // 32: api.Service.LoadUserOrderPage:output_type -> api.LoadUserOrderPageResponse
+	26, // [26:33] is the sub-list for method output_type
+	19, // [19:26] is the sub-list for method input_type
+	19, // [19:19] is the sub-list for extension type_name
+	19, // [19:19] is the sub-list for extension extendee
+	0,  // [0:19] is the sub-list for field type_name
 }
 
 func init() { file_api_proto_init() }
@@ -300,13 +1074,14 @@ func file_api_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_proto_rawDesc), len(file_api_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   4,
+			NumEnums:      1,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_api_proto_goTypes,
 		DependencyIndexes: file_api_proto_depIdxs,
+		EnumInfos:         file_api_proto_enumTypes,
 		MessageInfos:      file_api_proto_msgTypes,
 	}.Build()
 	File_api_proto = out.File

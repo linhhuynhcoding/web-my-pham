@@ -19,8 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Service_Login_FullMethodName    = "/api.Service/Login"
-	Service_Register_FullMethodName = "/api.Service/Register"
+	Service_Login_FullMethodName                  = "/api.Service/Login"
+	Service_Register_FullMethodName               = "/api.Service/Register"
+	Service_LoadHomeScreen_FullMethodName         = "/api.Service/LoadHomeScreen"
+	Service_LoadProductsByCategory_FullMethodName = "/api.Service/LoadProductsByCategory"
+	Service_LoadProductDetailPage_FullMethodName  = "/api.Service/LoadProductDetailPage"
+	Service_LoadProfileInfoPage_FullMethodName    = "/api.Service/LoadProfileInfoPage"
+	Service_LoadUserOrderPage_FullMethodName      = "/api.Service/LoadUserOrderPage"
 )
 
 // ServiceClient is the client API for Service service.
@@ -31,6 +36,16 @@ type ServiceClient interface {
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	// Register
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
+	// Load Home Screen
+	LoadHomeScreen(ctx context.Context, in *LoadHomeScreenRequest, opts ...grpc.CallOption) (*LoadHomeScreenResponse, error)
+	// Load Products by Category
+	LoadProductsByCategory(ctx context.Context, in *LoadProductsByCategoryRequest, opts ...grpc.CallOption) (*LoadProductsByCategoryResponse, error)
+	// Load Product Detail Page
+	LoadProductDetailPage(ctx context.Context, in *LoadProductDetailPageRequest, opts ...grpc.CallOption) (*LoadProductDetailPageResponse, error)
+	// Load Profile Info Page
+	LoadProfileInfoPage(ctx context.Context, in *LoadProfileInfoPageRequest, opts ...grpc.CallOption) (*LoadProfileInfoPageResponse, error)
+	// Load User Order Page
+	LoadUserOrderPage(ctx context.Context, in *LoadUserOrderPageRequest, opts ...grpc.CallOption) (*LoadUserOrderPageResponse, error)
 }
 
 type serviceClient struct {
@@ -61,6 +76,56 @@ func (c *serviceClient) Register(ctx context.Context, in *RegisterRequest, opts 
 	return out, nil
 }
 
+func (c *serviceClient) LoadHomeScreen(ctx context.Context, in *LoadHomeScreenRequest, opts ...grpc.CallOption) (*LoadHomeScreenResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LoadHomeScreenResponse)
+	err := c.cc.Invoke(ctx, Service_LoadHomeScreen_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) LoadProductsByCategory(ctx context.Context, in *LoadProductsByCategoryRequest, opts ...grpc.CallOption) (*LoadProductsByCategoryResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LoadProductsByCategoryResponse)
+	err := c.cc.Invoke(ctx, Service_LoadProductsByCategory_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) LoadProductDetailPage(ctx context.Context, in *LoadProductDetailPageRequest, opts ...grpc.CallOption) (*LoadProductDetailPageResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LoadProductDetailPageResponse)
+	err := c.cc.Invoke(ctx, Service_LoadProductDetailPage_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) LoadProfileInfoPage(ctx context.Context, in *LoadProfileInfoPageRequest, opts ...grpc.CallOption) (*LoadProfileInfoPageResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LoadProfileInfoPageResponse)
+	err := c.cc.Invoke(ctx, Service_LoadProfileInfoPage_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) LoadUserOrderPage(ctx context.Context, in *LoadUserOrderPageRequest, opts ...grpc.CallOption) (*LoadUserOrderPageResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LoadUserOrderPageResponse)
+	err := c.cc.Invoke(ctx, Service_LoadUserOrderPage_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ServiceServer is the server API for Service service.
 // All implementations must embed UnimplementedServiceServer
 // for forward compatibility.
@@ -69,6 +134,16 @@ type ServiceServer interface {
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	// Register
 	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
+	// Load Home Screen
+	LoadHomeScreen(context.Context, *LoadHomeScreenRequest) (*LoadHomeScreenResponse, error)
+	// Load Products by Category
+	LoadProductsByCategory(context.Context, *LoadProductsByCategoryRequest) (*LoadProductsByCategoryResponse, error)
+	// Load Product Detail Page
+	LoadProductDetailPage(context.Context, *LoadProductDetailPageRequest) (*LoadProductDetailPageResponse, error)
+	// Load Profile Info Page
+	LoadProfileInfoPage(context.Context, *LoadProfileInfoPageRequest) (*LoadProfileInfoPageResponse, error)
+	// Load User Order Page
+	LoadUserOrderPage(context.Context, *LoadUserOrderPageRequest) (*LoadUserOrderPageResponse, error)
 	mustEmbedUnimplementedServiceServer()
 }
 
@@ -84,6 +159,21 @@ func (UnimplementedServiceServer) Login(context.Context, *LoginRequest) (*LoginR
 }
 func (UnimplementedServiceServer) Register(context.Context, *RegisterRequest) (*RegisterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
+}
+func (UnimplementedServiceServer) LoadHomeScreen(context.Context, *LoadHomeScreenRequest) (*LoadHomeScreenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoadHomeScreen not implemented")
+}
+func (UnimplementedServiceServer) LoadProductsByCategory(context.Context, *LoadProductsByCategoryRequest) (*LoadProductsByCategoryResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoadProductsByCategory not implemented")
+}
+func (UnimplementedServiceServer) LoadProductDetailPage(context.Context, *LoadProductDetailPageRequest) (*LoadProductDetailPageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoadProductDetailPage not implemented")
+}
+func (UnimplementedServiceServer) LoadProfileInfoPage(context.Context, *LoadProfileInfoPageRequest) (*LoadProfileInfoPageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoadProfileInfoPage not implemented")
+}
+func (UnimplementedServiceServer) LoadUserOrderPage(context.Context, *LoadUserOrderPageRequest) (*LoadUserOrderPageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoadUserOrderPage not implemented")
 }
 func (UnimplementedServiceServer) mustEmbedUnimplementedServiceServer() {}
 func (UnimplementedServiceServer) testEmbeddedByValue()                 {}
@@ -142,6 +232,96 @@ func _Service_Register_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Service_LoadHomeScreen_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoadHomeScreenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).LoadHomeScreen(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Service_LoadHomeScreen_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).LoadHomeScreen(ctx, req.(*LoadHomeScreenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Service_LoadProductsByCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoadProductsByCategoryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).LoadProductsByCategory(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Service_LoadProductsByCategory_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).LoadProductsByCategory(ctx, req.(*LoadProductsByCategoryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Service_LoadProductDetailPage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoadProductDetailPageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).LoadProductDetailPage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Service_LoadProductDetailPage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).LoadProductDetailPage(ctx, req.(*LoadProductDetailPageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Service_LoadProfileInfoPage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoadProfileInfoPageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).LoadProfileInfoPage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Service_LoadProfileInfoPage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).LoadProfileInfoPage(ctx, req.(*LoadProfileInfoPageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Service_LoadUserOrderPage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoadUserOrderPageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServiceServer).LoadUserOrderPage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Service_LoadUserOrderPage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServiceServer).LoadUserOrderPage(ctx, req.(*LoadUserOrderPageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Service_ServiceDesc is the grpc.ServiceDesc for Service service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -156,6 +336,26 @@ var Service_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Register",
 			Handler:    _Service_Register_Handler,
+		},
+		{
+			MethodName: "LoadHomeScreen",
+			Handler:    _Service_LoadHomeScreen_Handler,
+		},
+		{
+			MethodName: "LoadProductsByCategory",
+			Handler:    _Service_LoadProductsByCategory_Handler,
+		},
+		{
+			MethodName: "LoadProductDetailPage",
+			Handler:    _Service_LoadProductDetailPage_Handler,
+		},
+		{
+			MethodName: "LoadProfileInfoPage",
+			Handler:    _Service_LoadProfileInfoPage_Handler,
+		},
+		{
+			MethodName: "LoadUserOrderPage",
+			Handler:    _Service_LoadUserOrderPage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

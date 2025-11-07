@@ -43,6 +43,8 @@ type Order struct {
 	Status          string           `json:"status"`
 	ShippingAddress string           `json:"shipping_address"`
 	Phone           string           `json:"phone"`
+	PaymentMethod   string           `json:"payment_method"`
+	OrderDate       pgtype.Date      `json:"order_date"`
 	CreatedAt       pgtype.Timestamp `json:"created_at"`
 	UpdatedAt       pgtype.Timestamp `json:"updated_at"`
 }
@@ -64,7 +66,7 @@ type Product struct {
 	Stock       int32            `json:"stock"`
 	Buyturn     int32            `json:"buyturn"`
 	ImageUrl    string           `json:"image_url"`
-	BrandID     pgtype.Text      `json:"brand_id"`
+	BrandID     int32            `json:"brand_id"`
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 	UpdatedAt   pgtype.Timestamp `json:"updated_at"`
 }

@@ -24,7 +24,7 @@ CREATE TABLE "products" (
   "stock" int NOT NULL,
   "buyturn" int NOT NULL,
   "image_url" string NOT NULL,
-  "brand_id" string,
+  "brand_id" int NOT NULL,
   "created_at" timestamp,
   "updated_at" timestamp
 );
@@ -51,6 +51,8 @@ CREATE TABLE "orders" (
   "status" varchar NOT NULL DEFAULT 'pending',
   "shipping_address" varchar NOT NULL,
   "phone" varchar NOT NULL,
+  "payment_method" varchar NOT NULL,
+  "order_date" DATE,
   "created_at" timestamp,
   "updated_at" timestamp
 );

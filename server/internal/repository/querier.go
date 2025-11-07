@@ -10,6 +10,25 @@ import (
 
 type Querier interface {
 	GetAllUsers(ctx context.Context, arg GetAllUsersParams) ([]User, error)
+	// order by buyturn
+	// stock > 0
+	// limit $1
+	GetBestSellerProducts(ctx context.Context, limit int32) ([]GetBestSellerProductsRow, error)
+	GetBrands(ctx context.Context) ([]Brand, error)
+	GetCategories(ctx context.Context) ([]Category, error)
+	// - group by user_id
+	// - user_id = $1
+	// - limit, offset
+	// - order by
+	GetOrderHistoryByUserID(ctx context.Context, arg GetOrderHistoryByUserIDParams) ([]GetOrderHistoryByUserIDRow, error)
+	GetProductByBrandID(ctx context.Context, arg GetProductByBrandIDParams) ([]GetProductByBrandIDRow, error)
+	// - categoryID = $1
+	// - price = [$2, $3]
+	// - limit, offset
+	// - order by
+	GetProductByCategoryID(ctx context.Context, arg GetProductByCategoryIDParams) ([]GetProductByCategoryIDRow, error)
+	GetProductByCategoryIDBasic(ctx context.Context, arg GetProductByCategoryIDBasicParams) ([]GetProductByCategoryIDBasicRow, error)
+	GetProductByID(ctx context.Context, id int32) (GetProductByIDRow, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByName(ctx context.Context, name string) (User, error)
 	IsUserExist(ctx context.Context, email string) error

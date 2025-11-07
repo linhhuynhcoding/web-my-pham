@@ -25,6 +25,42 @@ service Service {
       body: "*"
     };
   }
+
+  // Load Home Screen
+  rpc LoadHomeScreen(LoadHomeScreenRequest) returns (LoadHomeScreenResponse) {
+    option (google.api.http) = {
+      get: "/api/home"
+    };
+  }
+
+  // Load Products by Category
+  rpc LoadProductsByCategory(LoadProductsByCategoryRequest) returns (LoadProductsByCategoryResponse) {
+    option (google.api.http) = {
+      // The category_id will be part of the URL path.
+      get: "/api/categories/{category_id}/products"
+    };
+  }
+
+  // Load Product Detail Page
+  rpc LoadProductDetailPage(LoadProductDetailPageRequest) returns (LoadProductDetailPageResponse) {
+    option (google.api.http) = {
+      get: "/api/products/{product_id}"
+    };
+  }
+
+  // Load Profile Info Page
+  rpc LoadProfileInfoPage(LoadProfileInfoPageRequest) returns (LoadProfileInfoPageResponse) {
+    option (google.api.http) = {
+      get: "/api/profile"
+    };
+  }
+
+  // Load User Order Page
+  rpc LoadUserOrderPage(LoadUserOrderPageRequest) returns (LoadUserOrderPageResponse) {
+    option (google.api.http) = {
+      get: "/api/orders_history"
+    };
+  }
 }
 
 message LoginRequest {
@@ -44,3 +80,68 @@ message RegisterRequest{
 }
 
 message RegisterResponse{}
+
+message LoadHomeScreenRequest {}
+
+message LoadHomeScreenResponse {
+  repeated Product bestseller_products = 1;
+  repeated Product top_search_products = 2;
+  repeated Category categories = 3;
+  repeated Brand brands = 4;
+}
+
+message PriceRange {
+  double min = 1;
+  double max = 2;
+}
+
+message ProductFilter {
+  PriceRange price_range = 1;
+  repeated int32 brand_ids = 2;
+}
+
+enum ProductOrderBy {
+  BEST_SELLER = 0;
+  PRICE_ASC = 1;
+  PRICE_DESC = 2;
+}
+
+message LoadProductsByCategoryRequest {
+  int32 category_id = 1 [(validate.rules).int32.gt = 0];
+  ProductFilter filter = 2;
+  ProductOrderBy order_by = 3;
+  Pagination pagination = 4;
+}
+
+message LoadProductsByCategoryResponse {
+  repeated Product products = 1;
+  Pagination pagination = 2;
+  repeated Brand brands = 3;
+}
+
+message LoadProductDetailPageRequest {
+  int32 product_id = 1 [(validate.rules).int32.gt = 0];
+}
+
+message LoadProductDetailPageResponse {
+  Product product = 1;
+  repeated Product other_same_category_products = 2; // Renamed for clarity
+  repeated Product other_same_brand_products = 3;    // Renamed for clarity
+}
+
+message LoadProfileInfoPageRequest {
+  // No specific request parameters needed for loading the current user's profile.
+}
+
+message LoadProfileInfoPageResponse {
+  User user = 1;
+}
+
+message LoadUserOrderPageRequest {
+  Pagination pagination = 1; // Request pagination details for orders
+}
+
+message LoadUserOrderPageResponse {
+  repeated Order orders = 1;
+  Pagination pagination = 2;
+}
