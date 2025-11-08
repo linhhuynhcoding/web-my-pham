@@ -37,7 +37,7 @@ func (x Category) GetCreatedAt() pgtype.Timestamp { return x.CreatedAt }
 
 func (x Order) GetID() int32 { return x.ID }
 
-func (x Order) GetUserID() pgtype.Int4 { return x.UserID }
+func (x Order) GetUserEmail() string { return x.UserEmail }
 
 func (x Order) GetTotalPrice() pgtype.Numeric { return x.TotalPrice }
 

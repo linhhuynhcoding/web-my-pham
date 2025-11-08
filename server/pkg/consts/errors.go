@@ -9,6 +9,7 @@ var (
 	ErrInvalidData    = status.Error(codes.Internal, "invalid data")
 	ErrInvalidRequest = status.Error(codes.InvalidArgument, "invalid request")
 	ErrInternalServer = status.Error(codes.Internal, "internal server error")
+	ErrUnauthorized   = status.Error(codes.Unauthenticated, "unauthorized")
 )
 
 var (

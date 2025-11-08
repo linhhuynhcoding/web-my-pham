@@ -38,7 +38,7 @@ type Category struct {
 
 type Order struct {
 	ID              int32            `json:"id"`
-	UserID          pgtype.Int4      `json:"user_id"`
+	UserEmail       string           `json:"user_email"`
 	TotalPrice      pgtype.Numeric   `json:"total_price"`
 	Status          string           `json:"status"`
 	ShippingAddress string           `json:"shipping_address"`

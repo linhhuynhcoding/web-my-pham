@@ -39,3 +39,7 @@ const (
 const (
 	DATE_FORMAT = "01-01-2025"
 )
+
+const (
+	AuthorizationHeader = "authorization"
+)

@@ -1,10 +1,15 @@
 package domain
 
 import (
+	"context"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/linhhuynhcoding/web-my-pham/server/pkg/config"
+	"github.com/linhhuynhcoding/web-my-pham/server/pkg/consts"
+	jwtUtils "github.com/linhhuynhcoding/web-my-pham/server/utils/jwt"
+	"google.golang.org/grpc/metadata"
 )
 
 const (
@@ -30,4 +35,27 @@ func NewAccessTokenClaim(id int32, email, role string, cfg config.Config) Access
 			ExpiresAt: jwt.NewNumericDate(expiredAt),
 		},
 	}
+}
+
+func NewAccessTokenClaimFromHeader(ctx context.Context, cfg *config.Config) (AccessTokenClaim, error) {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return AccessTokenClaim{}, consts.ErrUnauthorized
+	}
+
+	authToken := md[consts.AuthorizationHeader][0]
+	token := strings.Split(authToken, " ")[1]
+
+	claims, err := jwtUtils.ValidateToken(token, jwtUtils.JwtOpts{
+		Key:           cfg.TokenConfig.AccessSecretKey,
+		SigningMethod: *DefaultSigningMethod,
+	})
+	if err != nil {
+		return AccessTokenClaim{}, err
+	}
+
+	return AccessTokenClaim{
+		Email: claims["email"].(string),
+		Role:  claims["role"].(string),
+	}, nil
 }

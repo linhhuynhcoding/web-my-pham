@@ -3,75 +3,63 @@ package repository
 
 import "github.com/jackc/pgx/v5/pgtype"
 
-func (x GetOrderHistoryByUserIDParams) GetUserID() pgtype.Int4 { return x.UserID }
+func (x GetOrderHistoryByUserEmailParams) GetUserEmail() string { return x.UserEmail }
 
-func (x GetOrderHistoryByUserIDParams) GetLimit() int32 { return x.Limit }
+func (x GetOrderHistoryByUserEmailParams) GetLimit() int32 { return x.Limit }
 
-func (x GetOrderHistoryByUserIDParams) GetOffset() int32 { return x.Offset }
+func (x GetOrderHistoryByUserEmailParams) GetOffset() int32 { return x.Offset }
 
-func (x GetOrderHistoryByUserIDRow) GetID() int32 { return x.ID }
+func (x GetOrderHistoryByUserEmailRow) GetID() int32 { return x.ID }
 
-func (x GetOrderHistoryByUserIDRow) GetUserID() pgtype.Int4 { return x.UserID }
+func (x GetOrderHistoryByUserEmailRow) GetUserEmail() string { return x.UserEmail }
 
-func (x GetOrderHistoryByUserIDRow) GetTotalPrice() pgtype.Numeric { return x.TotalPrice }
+func (x GetOrderHistoryByUserEmailRow) GetTotalPrice() pgtype.Numeric { return x.TotalPrice }
 
-func (x GetOrderHistoryByUserIDRow) GetStatus() string { return x.Status }
+func (x GetOrderHistoryByUserEmailRow) GetStatus() string { return x.Status }
 
-func (x GetOrderHistoryByUserIDRow) GetShippingAddress() string { return x.ShippingAddress }
+func (x GetOrderHistoryByUserEmailRow) GetShippingAddress() string { return x.ShippingAddress }
 
-func (x GetOrderHistoryByUserIDRow) GetPhone() string { return x.Phone }
+func (x GetOrderHistoryByUserEmailRow) GetPhone() string { return x.Phone }
 
-func (x GetOrderHistoryByUserIDRow) GetPaymentMethod() string { return x.PaymentMethod }
+func (x GetOrderHistoryByUserEmailRow) GetPaymentMethod() string { return x.PaymentMethod }
 
-func (x GetOrderHistoryByUserIDRow) GetOrderDate() pgtype.Date { return x.OrderDate }
+func (x GetOrderHistoryByUserEmailRow) GetOrderDate() pgtype.Date { return x.OrderDate }
 
-func (x GetOrderHistoryByUserIDRow) GetCreatedAt() pgtype.Timestamp { return x.CreatedAt }
+func (x GetOrderHistoryByUserEmailRow) GetCreatedAt() pgtype.Timestamp { return x.CreatedAt }
 
-func (x GetOrderHistoryByUserIDRow) GetUpdatedAt() pgtype.Timestamp { return x.UpdatedAt }
+func (x GetOrderHistoryByUserEmailRow) GetUpdatedAt() pgtype.Timestamp { return x.UpdatedAt }
 
-func (x GetOrderHistoryByUserIDRow) GetID_2() pgtype.Int4 { return x.ID_2 }
+func (x GetOrderHistoryByUserEmailRow) GetOrderItemID() pgtype.Int4 { return x.OrderItemID }
 
-func (x GetOrderHistoryByUserIDRow) GetOrderID() pgtype.Int4 { return x.OrderID }
+func (x GetOrderHistoryByUserEmailRow) GetOrderItemQuantity() pgtype.Int4 { return x.OrderItemQuantity }
 
-func (x GetOrderHistoryByUserIDRow) GetProductID() pgtype.Int4 { return x.ProductID }
+func (x GetOrderHistoryByUserEmailRow) GetOrderItemPrice() pgtype.Numeric { return x.OrderItemPrice }
 
-func (x GetOrderHistoryByUserIDRow) GetQuantity() pgtype.Int4 { return x.Quantity }
+func (x GetOrderHistoryByUserEmailRow) GetProductID() pgtype.Int4 { return x.ProductID }
 
-func (x GetOrderHistoryByUserIDRow) GetPrice() pgtype.Numeric { return x.Price }
+func (x GetOrderHistoryByUserEmailRow) GetProductName() pgtype.Text { return x.ProductName }
 
-func (x GetOrderHistoryByUserIDRow) GetID_3() pgtype.Int4 { return x.ID_3 }
+func (x GetOrderHistoryByUserEmailRow) GetProductDescription() pgtype.Text { return x.ProductDescription }
 
-func (x GetOrderHistoryByUserIDRow) GetName() pgtype.Text { return x.Name }
+func (x GetOrderHistoryByUserEmailRow) GetProductPrice() pgtype.Numeric { return x.ProductPrice }
 
-func (x GetOrderHistoryByUserIDRow) GetDescription() pgtype.Text { return x.Description }
+func (x GetOrderHistoryByUserEmailRow) GetProductStock() pgtype.Int4 { return x.ProductStock }
 
-func (x GetOrderHistoryByUserIDRow) GetPrice_2() pgtype.Numeric { return x.Price_2 }
+func (x GetOrderHistoryByUserEmailRow) GetProductBuyturn() pgtype.Int4 { return x.ProductBuyturn }
 
-func (x GetOrderHistoryByUserIDRow) GetCategoryID() pgtype.Int4 { return x.CategoryID }
+func (x GetOrderHistoryByUserEmailRow) GetProductImageUrl() pgtype.Text { return x.ProductImageUrl }
 
-func (x GetOrderHistoryByUserIDRow) GetStock() pgtype.Int4 { return x.Stock }
+func (x GetOrderHistoryByUserEmailRow) GetBrandID() pgtype.Int4 { return x.BrandID }
 
-func (x GetOrderHistoryByUserIDRow) GetBuyturn() pgtype.Int4 { return x.Buyturn }
+func (x GetOrderHistoryByUserEmailRow) GetBrandName() pgtype.Text { return x.BrandName }
 
-func (x GetOrderHistoryByUserIDRow) GetImageUrl() pgtype.Text { return x.ImageUrl }
+func (x GetOrderHistoryByUserEmailRow) GetBrandImageUrl() pgtype.Text { return x.BrandImageUrl }
 
-func (x GetOrderHistoryByUserIDRow) GetBrandID() pgtype.Int4 { return x.BrandID }
+func (x GetOrderHistoryByUserEmailRow) GetCategoryID() pgtype.Int4 { return x.CategoryID }
 
-func (x GetOrderHistoryByUserIDRow) GetCreatedAt_2() pgtype.Timestamp { return x.CreatedAt_2 }
+func (x GetOrderHistoryByUserEmailRow) GetCategoryName() pgtype.Text { return x.CategoryName }
 
-func (x GetOrderHistoryByUserIDRow) GetUpdatedAt_2() pgtype.Timestamp { return x.UpdatedAt_2 }
+func (x GetOrderHistoryByUserEmailRow) GetCategoryImageUrl() pgtype.Text { return x.CategoryImageUrl }
 
-func (x GetOrderHistoryByUserIDRow) GetID_4() pgtype.Int4 { return x.ID_4 }
-
-func (x GetOrderHistoryByUserIDRow) GetName_2() pgtype.Text { return x.Name_2 }
-
-func (x GetOrderHistoryByUserIDRow) GetImageUrl_2() pgtype.Text { return x.ImageUrl_2 }
-
-func (x GetOrderHistoryByUserIDRow) GetID_5() pgtype.Int4 { return x.ID_5 }
-
-func (x GetOrderHistoryByUserIDRow) GetName_3() pgtype.Text { return x.Name_3 }
-
-func (x GetOrderHistoryByUserIDRow) GetImageUrl_3() pgtype.Text { return x.ImageUrl_3 }
-
-func (x GetOrderHistoryByUserIDRow) GetCreatedAt_3() pgtype.Timestamp { return x.CreatedAt_3 }
+func (x GetOrderHistoryByUserEmailRow) GetTotal() *int64 { return x.Total }
 

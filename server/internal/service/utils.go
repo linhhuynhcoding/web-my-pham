@@ -78,3 +78,44 @@ func (s *Service) products2ProductsApi(product domain.IProduct) *api.Product {
 		UpdatedAt: format.PgToPbTimestamp(product.GetUpdatedAt()),
 	}
 }
+
+func (s *Service) orders2OrdersApi(order repository.GetOrderHistoryByUserEmailRow, orderItems []repository.GetOrderDetailByIDRow) *api.Order {
+	totalPrice, err := order.TotalPrice.Float64Value()
+	if err != nil {
+		s.logger.Error("failed to get total price", zap.Error(err))
+	}
+
+	orderItemsApi := make([]*api.OrderItem, 0, len(orderItems))
+	for _, item := range orderItems {
+		itemPrice, err := item.ProductPrice.Float64Value()
+		if err != nil {
+			s.logger.Error("failed to get item price", zap.Error(err))
+		}
+		totalPrice, err := item.Price.Float64Value()
+		if err != nil {
+			s.logger.Error("failed to get item price", zap.Error(err))
+		}
+
+		orderItemsApi = append(orderItemsApi, &api.OrderItem{
+			Id: item.ID,
+			Product: &api.Product{
+				Id:       item.ProductID.Int32,
+				Name:     item.ProductName.String,
+				Price:    totalPrice.Float64,
+				ImageUrl: item.ProductImageUrl.String,
+			},
+			Price:    itemPrice.Float64,
+			Quantity: item.Quantity,
+		})
+	}
+
+	apiResp := &api.Order{
+		Id:              order.ID,
+		TotalPrice:      totalPrice.Float64,
+		Status:          order.Status,
+		ShippingAddress: order.ShippingAddress,
+		Phone:           order.Phone,
+		Items:           orderItemsApi,
+	}
+	return apiResp
+}

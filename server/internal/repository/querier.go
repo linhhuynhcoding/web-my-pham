@@ -16,11 +16,12 @@ type Querier interface {
 	GetBestSellerProducts(ctx context.Context, limit int32) ([]GetBestSellerProductsRow, error)
 	GetBrands(ctx context.Context) ([]Brand, error)
 	GetCategories(ctx context.Context) ([]Category, error)
+	GetOrderDetailByID(ctx context.Context, orderID []int32) ([]GetOrderDetailByIDRow, error)
 	// - group by user_id
 	// - user_id = $1
 	// - limit, offset
 	// - order by
-	GetOrderHistoryByUserID(ctx context.Context, arg GetOrderHistoryByUserIDParams) ([]GetOrderHistoryByUserIDRow, error)
+	GetOrderHistoryByUserEmail(ctx context.Context, arg GetOrderHistoryByUserEmailParams) ([]GetOrderHistoryByUserEmailRow, error)
 	GetProductByBrandID(ctx context.Context, arg GetProductByBrandIDParams) ([]GetProductByBrandIDRow, error)
 	// - categoryID = $1
 	// - price = [$2, $3]

@@ -11,26 +11,102 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const getOrderHistoryByUserID = `-- name: GetOrderHistoryByUserID :many
-select o.id, user_id, total_price, status, shipping_address, phone, payment_method, order_date, o.created_at, o.updated_at, oi.id, order_id, product_id, quantity, oi.price, p.id, p.name, description, p.price, category_id, stock, buyturn, p.image_url, brand_id, p.created_at, p.updated_at, b.id, b.name, b.image_url, c.id, c.name, c.image_url, c.created_at from orders o
-left join order_items oi on oi.order_id = o.id
+const getOrderDetailByID = `-- name: GetOrderDetailByID :many
+select 
+    o.id, o.order_id, o.product_id, o.quantity, o.price,
+    p.id as product_id,
+    p.name as product_name,
+    p.description as product_description,
+    p.price as product_price,
+    p.image_url as product_image_url,
+    b.id as brand_id,
+    b.name as brand_name,
+    b.image_url as brand_image_url,
+    c.name as category_name,
+    c.id as category_id,
+    c.image_url as category_image_url
+from order_items o
 left join products p on p.id = oi.product_id
 left join brands b on b.id = p.brand_id
 left join categories c on c.id = p.category_id
-where o.user_id = $1
+where o.order_id = any($1::int[])
+`
+
+type GetOrderDetailByIDRow struct {
+	ID                 int32          `json:"id"`
+	OrderID            pgtype.Int4    `json:"order_id"`
+	ProductID          pgtype.Int4    `json:"product_id"`
+	Quantity           int32          `json:"quantity"`
+	Price              pgtype.Numeric `json:"price"`
+	ProductID_2        pgtype.Int4    `json:"product_id_2"`
+	ProductName        pgtype.Text    `json:"product_name"`
+	ProductDescription pgtype.Text    `json:"product_description"`
+	ProductPrice       pgtype.Numeric `json:"product_price"`
+	ProductImageUrl    pgtype.Text    `json:"product_image_url"`
+	BrandID            pgtype.Int4    `json:"brand_id"`
+	BrandName          pgtype.Text    `json:"brand_name"`
+	BrandImageUrl      pgtype.Text    `json:"brand_image_url"`
+	CategoryName       pgtype.Text    `json:"category_name"`
+	CategoryID         pgtype.Int4    `json:"category_id"`
+	CategoryImageUrl   pgtype.Text    `json:"category_image_url"`
+}
+
+func (q *Queries) GetOrderDetailByID(ctx context.Context, orderID []int32) ([]GetOrderDetailByIDRow, error) {
+	rows, err := q.db.Query(ctx, getOrderDetailByID, orderID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetOrderDetailByIDRow{}
+	for rows.Next() {
+		var i GetOrderDetailByIDRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.OrderID,
+			&i.ProductID,
+			&i.Quantity,
+			&i.Price,
+			&i.ProductID_2,
+			&i.ProductName,
+			&i.ProductDescription,
+			&i.ProductPrice,
+			&i.ProductImageUrl,
+			&i.BrandID,
+			&i.BrandName,
+			&i.BrandImageUrl,
+			&i.CategoryName,
+			&i.CategoryID,
+			&i.CategoryImageUrl,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getOrderHistoryByUserEmail = `-- name: GetOrderHistoryByUserEmail :many
+select
+    o.id, o.user_email, o.total_price, o.status, o.shipping_address, o.phone, o.payment_method, o.order_date, o.created_at, o.updated_at,
+    count (*) over () as total
+from orders o
+where o.user_email = $1
 order by o.order_date desc
 limit $2 offset $3
 `
 
-type GetOrderHistoryByUserIDParams struct {
-	UserID pgtype.Int4 `json:"user_id"`
-	Limit  int32       `json:"limit"`
-	Offset int32       `json:"offset"`
+type GetOrderHistoryByUserEmailParams struct {
+	UserEmail string `json:"user_email"`
+	Limit     int32  `json:"limit"`
+	Offset    int32  `json:"offset"`
 }
 
-type GetOrderHistoryByUserIDRow struct {
+type GetOrderHistoryByUserEmailRow struct {
 	ID              int32            `json:"id"`
-	UserID          pgtype.Int4      `json:"user_id"`
+	UserEmail       string           `json:"user_email"`
 	TotalPrice      pgtype.Numeric   `json:"total_price"`
 	Status          string           `json:"status"`
 	ShippingAddress string           `json:"shipping_address"`
@@ -39,47 +115,25 @@ type GetOrderHistoryByUserIDRow struct {
 	OrderDate       pgtype.Date      `json:"order_date"`
 	CreatedAt       pgtype.Timestamp `json:"created_at"`
 	UpdatedAt       pgtype.Timestamp `json:"updated_at"`
-	ID_2            pgtype.Int4      `json:"id_2"`
-	OrderID         pgtype.Int4      `json:"order_id"`
-	ProductID       pgtype.Int4      `json:"product_id"`
-	Quantity        pgtype.Int4      `json:"quantity"`
-	Price           pgtype.Numeric   `json:"price"`
-	ID_3            pgtype.Int4      `json:"id_3"`
-	Name            pgtype.Text      `json:"name"`
-	Description     pgtype.Text      `json:"description"`
-	Price_2         pgtype.Numeric   `json:"price_2"`
-	CategoryID      pgtype.Int4      `json:"category_id"`
-	Stock           pgtype.Int4      `json:"stock"`
-	Buyturn         pgtype.Int4      `json:"buyturn"`
-	ImageUrl        pgtype.Text      `json:"image_url"`
-	BrandID         pgtype.Int4      `json:"brand_id"`
-	CreatedAt_2     pgtype.Timestamp `json:"created_at_2"`
-	UpdatedAt_2     pgtype.Timestamp `json:"updated_at_2"`
-	ID_4            pgtype.Int4      `json:"id_4"`
-	Name_2          pgtype.Text      `json:"name_2"`
-	ImageUrl_2      pgtype.Text      `json:"image_url_2"`
-	ID_5            pgtype.Int4      `json:"id_5"`
-	Name_3          pgtype.Text      `json:"name_3"`
-	ImageUrl_3      pgtype.Text      `json:"image_url_3"`
-	CreatedAt_3     pgtype.Timestamp `json:"created_at_3"`
+	Total           *int64           `json:"total"`
 }
 
 // - group by user_id
 // - user_id = $1
 // - limit, offset
 // - order by
-func (q *Queries) GetOrderHistoryByUserID(ctx context.Context, arg GetOrderHistoryByUserIDParams) ([]GetOrderHistoryByUserIDRow, error) {
-	rows, err := q.db.Query(ctx, getOrderHistoryByUserID, arg.UserID, arg.Limit, arg.Offset)
+func (q *Queries) GetOrderHistoryByUserEmail(ctx context.Context, arg GetOrderHistoryByUserEmailParams) ([]GetOrderHistoryByUserEmailRow, error) {
+	rows, err := q.db.Query(ctx, getOrderHistoryByUserEmail, arg.UserEmail, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []GetOrderHistoryByUserIDRow{}
+	items := []GetOrderHistoryByUserEmailRow{}
 	for rows.Next() {
-		var i GetOrderHistoryByUserIDRow
+		var i GetOrderHistoryByUserEmailRow
 		if err := rows.Scan(
 			&i.ID,
-			&i.UserID,
+			&i.UserEmail,
 			&i.TotalPrice,
 			&i.Status,
 			&i.ShippingAddress,
@@ -88,29 +142,7 @@ func (q *Queries) GetOrderHistoryByUserID(ctx context.Context, arg GetOrderHisto
 			&i.OrderDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
-			&i.ID_2,
-			&i.OrderID,
-			&i.ProductID,
-			&i.Quantity,
-			&i.Price,
-			&i.ID_3,
-			&i.Name,
-			&i.Description,
-			&i.Price_2,
-			&i.CategoryID,
-			&i.Stock,
-			&i.Buyturn,
-			&i.ImageUrl,
-			&i.BrandID,
-			&i.CreatedAt_2,
-			&i.UpdatedAt_2,
-			&i.ID_4,
-			&i.Name_2,
-			&i.ImageUrl_2,
-			&i.ID_5,
-			&i.Name_3,
-			&i.ImageUrl_3,
-			&i.CreatedAt_3,
+			&i.Total,
 		); err != nil {
 			return nil, err
 		}
