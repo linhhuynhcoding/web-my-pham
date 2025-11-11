@@ -3,6 +3,7 @@ import './App.css';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { AnimatePresence, motion } from 'framer-motion';
+import Footer from './components/Footer';
 
 function App() {
   const location = useLocation();
@@ -32,6 +33,7 @@ function App() {
             </motion.div>
             )
           </AnimatePresence>
+        <Footer></Footer>
         </main>
       </div>
     </div>

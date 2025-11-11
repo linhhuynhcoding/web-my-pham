@@ -39,6 +39,7 @@ export interface Product {
   brand: Brand;
   created_at: string;
   updated_at: string;
+  discount: number;
 }
 
 export interface OrderItem {

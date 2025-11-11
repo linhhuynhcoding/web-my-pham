@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import { login as apiLogin } from "../api/auth";
-import { Card } from "../components/Card";
+import { CardMotion } from "../components/Card";
 import { Loader2 } from "lucide-react";
 
 export const LoginPage = () => {
@@ -31,7 +31,7 @@ export const LoginPage = () => {
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-50">
-            <Card className="p-8 w-full max-w-sm">
+            <CardMotion className="p-8 w-full max-w-sm">
                 <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
@@ -52,7 +52,7 @@ export const LoginPage = () => {
                         {isLoading ? <Loader2 className="animate-spin" /> : "Log In"}
                     </button>
                 </form>
-            </Card>
+            </CardMotion>
         </div>
     );
 };

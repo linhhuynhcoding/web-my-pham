@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-export const Card = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
+export const CardMotion = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
     return (
         <motion.div
             className={`bg-white rounded-xl shadow-sm border border-gray-100 ${className}`}
