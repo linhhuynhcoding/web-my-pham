@@ -18,7 +18,7 @@ export const LoginPage = () => {
         setError("");
 
         try {
-            await apiLogin({ password });
+            await apiLogin({ email, password });
             login();
             navigate("/");
         } catch (err) {

@@ -16,7 +16,7 @@ function App() {
 
   return (
     <div className="h-full w-full flex flex-1 h-screen bg-gray-50 min-h-screen">
-      <Sidebar currentPage={currentPage} onNavigate={(page) => navigate(`/${page}`)} />
+      {/* <Sidebar currentPage={currentPage} onNavigate={(page) => navigate(`/${page}`)} /> */}
       <div className="flex flex-1 flex-col overflow-hidden">
         <Header title={getPageTitle(currentPage)} />
         <main className="flex-1 overflow-y-auto">

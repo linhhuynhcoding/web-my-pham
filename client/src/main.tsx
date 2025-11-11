@@ -12,6 +12,7 @@ import './index.css';
 import './i18n'; // Import the i18n configuration
 import { LoginPage } from './pages/LoginPage';
 import { PrivateRoute } from './components/PrivateRoute';
+import { HomePage } from './pages/HomePage';
 // Create a client for React Query
 const queryClient = new QueryClient();
 
@@ -22,11 +23,16 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
-  },
+  },  
   {
     path: "/",
     element: protectedApp,
-    children: [],
+    children: [
+      {
+        path: "/",
+        element: <HomePage />,
+      },
+    ],
   },
 ]);
 
