@@ -11,27 +11,46 @@ import App from './App';
 import './index.css';
 import './i18n'; // Import the i18n configuration
 import { LoginPage } from './pages/LoginPage';
-import { PrivateRoute } from './components/PrivateRoute';
 import { HomePage } from './pages/HomePage';
+import { CategoryProductPage } from './pages/CategoryProductPage';
+// import { ProductDetailPage } from './pages/ProductDetailPage';
+import { CartPage } from './pages/CardPage';
+import { RegisterPage } from './pages/RegisterPage';
+// import { PrivateRoute } from './components/PrivateRoute';
 // Create a client for React Query
 const queryClient = new QueryClient();
 
 
-const protectedApp = <PrivateRoute><App /></PrivateRoute>;
-
 const router = createBrowserRouter([
-  {
-    path: "/login",
-    element: <LoginPage />,
-  },  
+
   {
     path: "/",
-    element: protectedApp,
+    element: <App />,
     children: [
       {
-        path: "/",
+        path: "/login",
+        element: <LoginPage />,
+      },
+      {
+        path: "/register",
+        element: <RegisterPage />,
+      },
+      {
+        index: true,
         element: <HomePage />,
       },
+      {
+        path: "/category/:categoryId",
+        element: <CategoryProductPage />,
+      },
+      {
+        path: "/cart",
+        element: <CartPage />,
+      },
+      // {
+      //   path: "/product/:productId",
+      //   element: <ProductDetailPage />,
+      // }
     ],
   },
 ]);

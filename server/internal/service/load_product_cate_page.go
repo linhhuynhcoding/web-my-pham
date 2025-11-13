@@ -4,7 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"math/big"
+	"strings"
 
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/linhhuynhcoding/web-my-pham/server/api"
 	"github.com/linhhuynhcoding/web-my-pham/server/internal/repository"
 	"go.uber.org/zap"
@@ -37,17 +40,24 @@ func (s *Service) LoadProductsByCategory(ctx context.Context, req *api.LoadProdu
 	logger.Info("LoadProductsByCategory", zap.Any("req", req))
 
 	limit, offset := s.buildLimitOffset(req.Pagination)
+	orderBy := req.OrderBy.String()
+	if orderBy == "" {
+		orderBy = "best_seller"
+	} else {
+		orderBy = strings.ToLower(orderBy)
+	}
+
 	getProductParams := repository.GetProductByCategoryIDParams{
 		CategoryID: req.CategoryId,
 		Limit:      limit,
 		Offset:     offset,
-		SortBy:     string(req.OrderBy),
+		SortBy:     orderBy,
 	}
-	if req.Filter.PriceRange != nil {
-		getProductParams.PriceMax = req.Filter.PriceRange.Max
-		getProductParams.PriceMin = req.Filter.PriceRange.Min
+	if req.Filter != nil && req.Filter.PriceRange != nil {
+		getProductParams.PriceMax = pgtype.Numeric{Int: big.NewInt(int64(req.Filter.PriceRange.Max))}
+		getProductParams.PriceMin = pgtype.Numeric{Int: big.NewInt(int64(req.Filter.PriceRange.Min))}
 	}
-	if len(req.Filter.BrandIds) > 0 {
+	if req.Filter != nil && len(req.Filter.BrandIds) > 0 {
 		getProductParams.BrandID = req.Filter.BrandIds
 	}
 

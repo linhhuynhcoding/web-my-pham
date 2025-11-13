@@ -2,7 +2,7 @@ import envConfig from '../config';
 import { RegisterRequest, RegisterResponse, User } from './types';
 
 export interface LoginResponse {
-  access_token: string;
+  accessToken: string;
   user: User;
 }
 

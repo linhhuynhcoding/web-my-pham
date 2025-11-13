@@ -18,16 +18,18 @@ const (
 
 type AccessTokenClaim struct {
 	jwt.RegisteredClaims
-	Email string `json:"email"`
-	Role  string `json:"role"`
+	Email  string `json:"email"`
+	UserID int32  `json:"user_id"`
+	Role   string `json:"role"`
 }
 
 func NewAccessTokenClaim(id int32, email, role string, cfg config.Config) AccessTokenClaim {
 	expiredAt := time.Now().UTC().Add(time.Duration(cfg.TokenConfig.AccessTokenTTL) * time.Second)
 
 	return AccessTokenClaim{
-		Email: email,
-		Role:  role,
+		Email:  email,
+		Role:   role,
+		UserID: id,
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject:   string(id),
 			Issuer:    DefaultIssuer,
@@ -47,7 +49,7 @@ func NewAccessTokenClaimFromHeader(ctx context.Context, cfg *config.Config) (Acc
 	token := strings.Split(authToken, " ")[1]
 
 	claims, err := jwtUtils.ValidateToken(token, jwtUtils.JwtOpts{
-		Key:           cfg.TokenConfig.AccessSecretKey,
+		Key:           []byte(cfg.TokenConfig.AccessSecretKey),
 		SigningMethod: *DefaultSigningMethod,
 	})
 	if err != nil {
@@ -55,7 +57,8 @@ func NewAccessTokenClaimFromHeader(ctx context.Context, cfg *config.Config) (Acc
 	}
 
 	return AccessTokenClaim{
-		Email: claims["email"].(string),
-		Role:  claims["role"].(string),
+		Email:  claims["email"].(string),
+		UserID: int32(claims["user_id"].(float64)),
+		Role:   claims["role"].(string),
 	}, nil
 }

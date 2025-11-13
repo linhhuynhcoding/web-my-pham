@@ -17,4 +17,5 @@ var (
 	ErrInvalidPassword  = status.Error(codes.Unauthenticated, "incorrect password")
 	ErrUserAlreadyExist = status.Error(codes.AlreadyExists, "user already exist")
 	ErrCannotRegister   = status.Error(codes.Internal, "cannot register")
+	ErrPermissionDenied = status.Error(codes.PermissionDenied, "permission denied")
 )

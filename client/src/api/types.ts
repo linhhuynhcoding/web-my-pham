@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
 export interface Pagination {
-  current_page: number;
-  page_size: number;
-  last_page: number;
-  total: number;
-  has_next_page: boolean;
+  currentPage?: number;
+  pageSize?: number;
+  lastPage?: number;
+  total?: number;
+  hasNextPage?: boolean;
 }
 
 export interface User {
@@ -17,14 +17,15 @@ export interface User {
 export interface Category {
   id: number;
   name: string;
-  image_url: string;
-  created_at: string;
+  imageUrl: string;
+  createdAt: string;
 }
 
 export interface Brand {
   id: number;
   name: string;
-  image_url: string;
+  imageUrl: string;
+  bgUrl: string;
 }
 
 export interface Product {
@@ -32,34 +33,34 @@ export interface Product {
   name: string;
   description: string;
   price: number;
-  category: Category;
+  category: Category; 
   stock: number;
-  buy_turn: number;
-  image_url: string;
-  brand: Brand;
-  created_at: string;
-  updated_at: string;
+  buyTurn: number;
+  imageUrl: string;
+  brand: Brand; 
+  createdAt: string;
+  updatedAt: string;
   discount: number;
 }
 
 export interface OrderItem {
   id: number;
-  order_id: number;
-  product_id: number;
+  orderId: number;
+  productId: number;
   quantity: number;
   price: number;
-  product: Product;
+  product: Product; 
 }
 
 export interface Order {
   id: number;
-  user_id: number;
-  total_price: number;
+  userId: number;
+  totalPrice: number;
   status: string;
-  shipping_address: string;
+  shippingAddress: string;
   phone: string;
-  created_at: string;
-  updated_at: string;
+  createdAt: string;
+  updatedAt: string;
   items: OrderItem[];
   user: User;
 }
@@ -67,15 +68,15 @@ export interface Order {
 export interface RegisterRequest {
   email?: string;
   password?: string;
-  confirm_password?: string;
+  confirmPassword?: string;
   name?: string;
 }
 
 export interface RegisterResponse {}
 
 export interface LoadHomeScreenResponse {
-  bestseller_products: Product[];
-  top_search_products: Product[];
+  bestsellerProducts: Product[]; 
+  topSearchProducts: Product[]; 
   categories: Category[];
   brands: Brand[];
 }
@@ -86,8 +87,8 @@ export interface PriceRange {
 }
 
 export interface ProductFilter {
-  price_range?: PriceRange;
-  brand_ids?: number[];
+  priceRange?: PriceRange; 
+  brandIds?: number[]; 
 }
 
 export enum ProductOrderBy {
@@ -98,14 +99,14 @@ export enum ProductOrderBy {
 
 export interface LoadProductsByCategoryResponse {
   products: Product[];
-  pagination: Pagination;
+  pagination: Pagination; 
   brands: Brand[];
 }
 
 export interface LoadProductDetailPageResponse {
   product: Product;
-  other_same_category_products: Product[];
-  other_same_brand_products: Product[];
+  otherSameCategoryProducts: Product[];
+  otherSameBrandProducts: Product[];
 }
 
 export interface LoadProfileInfoPageResponse {
@@ -115,4 +116,43 @@ export interface LoadProfileInfoPageResponse {
 export interface LoadUserOrderPageResponse {
   orders: Order[];
   pagination: Pagination;
+}
+
+export interface CartItem {
+  id: number;
+  cartId: number;
+  productId: number;
+  quantity: number;
+  subtotal: number;
+  product: Product;
+}
+
+export interface LoadCartPageResponse {
+  items: CartItem[];
+  totalPrice: number;
+  checkOutBill: number;
+}
+
+export interface UpdateCartItemRequest {
+  cartItemId: number;
+  quantity: number;
+}
+
+export interface UpdateCartItemResponse {
+  item: CartItem;
+}
+
+export interface DeleteCartItemRequest {
+  cartItemId: number;
+}
+
+export interface DeleteCartItemResponse {}
+
+export interface AddCartItemRequest {
+  productId: number;
+  quantity: number;
+}
+
+export interface AddCartItemResponse {
+  item: CartItem;
 }

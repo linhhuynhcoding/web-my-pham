@@ -39,6 +39,10 @@ func main() {
 
 	commands := []Command{
 		{
+			name:    "migrate",
+			command: MigrateCommand,
+		},
+		{
 			name:    "server",
 			command: ServerCommand,
 		},
@@ -69,7 +73,7 @@ func ServerCommand() {
 func runServer(
 	lc fx.Lifecycle,
 	ctx context.Context,
-	cfg config.Config,
+	cfg *config.Config,
 	log *zap.Logger,
 	service *service.Service,
 ) {
@@ -169,7 +173,7 @@ func NewGatewayServer(
 	}
 }
 
-func NewDb(ctx context.Context, logger *zap.Logger, config config.Config) repository.Store {
+func NewDb(ctx context.Context, logger *zap.Logger, config *config.Config) repository.Store {
 	connPool, err := pgxpool.New(ctx, config.DBSource)
 	if err != nil {
 		log.Fatal("cannot connect to db")

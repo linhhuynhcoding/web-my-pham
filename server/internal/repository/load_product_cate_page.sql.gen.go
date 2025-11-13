@@ -39,17 +39,12 @@ func (x GetProductByCategoryIDRow) GetCreatedAt() pgtype.Timestamp { return x.Cr
 
 func (x GetProductByCategoryIDRow) GetUpdatedAt() pgtype.Timestamp { return x.UpdatedAt }
 
-func (x GetProductByCategoryIDRow) GetBrandID_2() pgtype.Int4 { return x.BrandID_2 }
-
 func (x GetProductByCategoryIDRow) GetBrandName() pgtype.Text { return x.BrandName }
 
 func (x GetProductByCategoryIDRow) GetBrandImageUrl() pgtype.Text { return x.BrandImageUrl }
 
 func (x GetProductByCategoryIDRow) GetCategoryName() pgtype.Text { return x.CategoryName }
 
-func (x GetProductByCategoryIDRow) GetCategoryID_2() pgtype.Int4 { return x.CategoryID_2 }
-
 func (x GetProductByCategoryIDRow) GetCategoryImageUrl() pgtype.Text { return x.CategoryImageUrl }
 
 func (x GetProductByCategoryIDRow) GetTotal() *int64 { return x.Total }
-

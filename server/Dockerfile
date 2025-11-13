@@ -16,6 +16,7 @@ RUN apk add --no-cache bash curl busybox-suid
 
 COPY --from=builder /app/main .
 COPY config.yaml ./config.yaml
+COPY sql/ ./sql/
 COPY entrypoint.sh ./entrypoint.sh
 RUN chmod +x ./entrypoint.sh
 

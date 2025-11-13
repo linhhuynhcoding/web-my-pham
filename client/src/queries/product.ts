@@ -13,7 +13,7 @@ const productKeys = {
     categoryId: number,
     filter?: ProductFilter,
     orderBy?: ProductOrderBy,
-    pagination?: Pagination
+    pagination?: Pagination 
   ) =>
     [
       ...productKeys.all,
@@ -35,8 +35,8 @@ export const useHomeScreen = () => {
 export const useProductsByCategory = (
   categoryId: number,
   filter?: ProductFilter,
-  orderBy?: ProductOrderBy,
-  pagination?: Pagination
+  orderBy?: ProductOrderBy, 
+  pagination?: Pagination 
 ) => {
   return useQuery({
     queryKey: productKeys.category(categoryId, filter, orderBy, pagination),

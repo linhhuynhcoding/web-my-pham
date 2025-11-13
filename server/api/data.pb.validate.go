@@ -1340,6 +1340,8 @@ func (m *Brand) validate(all bool) error {
 
 	// no validation rules for ImageUrl
 
+	// no validation rules for BgUrl
+
 	if len(errors) > 0 {
 		return BrandMultiError(errors)
 	}

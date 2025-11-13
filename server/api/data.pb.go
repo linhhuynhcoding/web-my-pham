@@ -724,6 +724,7 @@ type Brand struct {
 	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	ImageUrl      string                 `protobuf:"bytes,3,opt,name=image_url,json=imageUrl,proto3" json:"image_url,omitempty"`
+	BgUrl         string                 `protobuf:"bytes,4,opt,name=bg_url,json=bgUrl,proto3" json:"bg_url,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -775,6 +776,13 @@ func (x *Brand) GetName() string {
 func (x *Brand) GetImageUrl() string {
 	if x != nil {
 		return x.ImageUrl
+	}
+	return ""
+}
+
+func (x *Brand) GetBgUrl() string {
+	if x != nil {
+		return x.BgUrl
 	}
 	return ""
 }
@@ -857,11 +865,12 @@ const file_data_proto_rawDesc = "" +
 	"product_id\x18\x03 \x01(\x05R\tproductId\x12\x1a\n" +
 	"\bquantity\x18\x04 \x01(\x05R\bquantity\x12\x14\n" +
 	"\x05price\x18\x05 \x01(\x01R\x05price\x12&\n" +
-	"\aproduct\x18\x06 \x01(\v2\f.api.ProductR\aproduct\"H\n" +
+	"\aproduct\x18\x06 \x01(\v2\f.api.ProductR\aproduct\"_\n" +
 	"\x05Brand\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1b\n" +
-	"\timage_url\x18\x03 \x01(\tR\bimageUrlB3Z1github.com/linhhuynhcoding/web-my-pham/server/apib\x06proto3"
+	"\timage_url\x18\x03 \x01(\tR\bimageUrl\x12\x15\n" +
+	"\x06bg_url\x18\x04 \x01(\tR\x05bgUrlB3Z1github.com/linhhuynhcoding/web-my-pham/server/apib\x06proto3"
 
 var (
 	file_data_proto_rawDescOnce sync.Once

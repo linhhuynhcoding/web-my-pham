@@ -6,15 +6,21 @@ package repository
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Querier interface {
+	AddCartItem(ctx context.Context, arg AddCartItemParams) (CartItem, error)
+	CreateUserCart(ctx context.Context, userID pgtype.Int4) error
+	DeleteCartItem(ctx context.Context, id int32) error
 	GetAllUsers(ctx context.Context, arg GetAllUsersParams) ([]User, error)
 	// order by buyturn
 	// stock > 0
 	// limit $1
 	GetBestSellerProducts(ctx context.Context, limit int32) ([]GetBestSellerProductsRow, error)
 	GetBrands(ctx context.Context) ([]Brand, error)
+	GetCartByUserId(ctx context.Context, userID pgtype.Int4) ([]GetCartByUserIdRow, error)
 	GetCategories(ctx context.Context) ([]Category, error)
 	GetOrderDetailByID(ctx context.Context, orderID []int32) ([]GetOrderDetailByIDRow, error)
 	// - group by user_id
@@ -23,16 +29,14 @@ type Querier interface {
 	// - order by
 	GetOrderHistoryByUserEmail(ctx context.Context, arg GetOrderHistoryByUserEmailParams) ([]GetOrderHistoryByUserEmailRow, error)
 	GetProductByBrandID(ctx context.Context, arg GetProductByBrandIDParams) ([]GetProductByBrandIDRow, error)
-	// - categoryID = $1
-	// - price = [$2, $3]
-	// - limit, offset
-	// - order by
 	GetProductByCategoryID(ctx context.Context, arg GetProductByCategoryIDParams) ([]GetProductByCategoryIDRow, error)
 	GetProductByCategoryIDBasic(ctx context.Context, arg GetProductByCategoryIDBasicParams) ([]GetProductByCategoryIDBasicRow, error)
 	GetProductByID(ctx context.Context, id int32) (GetProductByIDRow, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByName(ctx context.Context, name string) (User, error)
+	IsCartItemOwner(ctx context.Context, arg IsCartItemOwnerParams) (bool, error)
 	IsUserExist(ctx context.Context, email string) error
+	UpdateCartItem(ctx context.Context, arg UpdateCartItemParams) (CartItem, error)
 	UpsertUSer(ctx context.Context, arg UpsertUSerParams) (User, error)
 }
 

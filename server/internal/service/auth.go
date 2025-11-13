@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/linhhuynhcoding/web-my-pham/server/api"
 	"github.com/linhhuynhcoding/web-my-pham/server/internal/domain"
 	"github.com/linhhuynhcoding/web-my-pham/server/internal/repository"
@@ -26,7 +27,7 @@ func (s *Service) Login(ctx context.Context, req *api.LoginRequest) (*api.LoginR
 	}
 
 	// check user is exist
-	user, err := s.store.GetUserByEmail(ctx, req.String())
+	user, err := s.store.GetUserByEmail(ctx, req.GetEmail())
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
 		logger.Error("get user by email failed!", zap.Any("error", err))
 		return nil, consts.ErrInvalidData
@@ -36,7 +37,7 @@ func (s *Service) Login(ctx context.Context, req *api.LoginRequest) (*api.LoginR
 		return nil, consts.ErrUserNotFournd
 	}
 
-	userHelper := domain.NewUserHelper(&user, s.cfg)
+	userHelper := domain.NewUserHelper(&user, s.cfg, s.logger)
 
 	// validate password
 	err = userHelper.ValidatePassword(req.Password)
@@ -91,7 +92,7 @@ func (s *Service) Register(ctx context.Context, req *api.RegisterRequest) (*api.
 		return nil, consts.ErrInternalServer
 	}
 
-	_, err = s.store.UpsertUSer(ctx, repository.UpsertUSerParams{
+	user, err := s.store.UpsertUSer(ctx, repository.UpsertUSerParams{
 		Name:     req.Name,
 		Email:    req.Email,
 		Password: string(hashedPassword),
@@ -100,6 +101,14 @@ func (s *Service) Register(ctx context.Context, req *api.RegisterRequest) (*api.
 	if err != nil {
 		logger.Error("failed to insert user", zap.Error(err))
 		return nil, consts.ErrCannotRegister
+	}
+
+	err = s.store.CreateUserCart(ctx, pgtype.Int4{
+		Int32: user.ID,
+		Valid: true,
+	})
+	if err != nil {
+		logger.Error("failed to create user cart", zap.Error(err))
 	}
 
 	return &api.RegisterResponse{}, nil

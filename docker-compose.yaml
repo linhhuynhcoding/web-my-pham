@@ -1,0 +1,69 @@
+version: "3.9"
+services:
+  webmypham-postgres:
+    image: postgres:14-alpine
+    container_name: webmypham-postgres
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=webmypham
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U root -d webmypham" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "9999:5432"
+    networks:
+      - webmypham-network
+    volumes:
+      - ./data-webmypham-postgres/:/var/lib/postgresql/data
+  migrate-server:
+    build:
+      context: ./server # Đường dẫn đến thư mục chứa Dockerfile của server
+      dockerfile: Dockerfile
+    command: ["migrate"]
+    container_name: migrate-server
+    environment:
+      # Thêm các biến môi trường cần thiết cho server của bạn ở đây
+      - CONFIG_PATH=/app/
+      - DB_SOURCE=postgresql://root:secret@webmypham-postgres:5432/webmypham?sslmode=disable
+      - REDIS_ADDRESS=webmypham-redis:6379
+    depends_on:
+      webmypham-postgres:
+        condition: service_healthy # Chờ cho đến khi postgres healthy
+    networks:
+      - webmypham-network
+  webmypham-server:
+    build:
+      context: ./server # Đường dẫn đến thư mục chứa Dockerfile của server
+      dockerfile: Dockerfile
+    command: ["server"]
+    container_name: webmypham-server
+    ports:
+      - "8088:8080" # Map port 8001 của container ra port 8082 trên máy host
+    environment:
+      # Thêm các biến môi trường cần thiết cho server của bạn ở đây
+      - CONFIG_PATH=/app/
+      - DB_SOURCE=postgresql://root:secret@webmypham-postgres:5432/webmypham?sslmode=disable
+      - REDIS_ADDRESS=webmypham-redis:6379
+    depends_on:
+      webmypham-postgres:
+        condition: service_healthy # Chờ cho đến khi postgres healthy
+    networks:
+      - webmypham-network
+  webmypham-client:
+    build:
+      context: ./client # Use the 'react' directory
+      dockerfile: Dockerfile
+    container_name: webmypham-client
+    ports:
+      - "3000:3000" # Map port 3000 (Vite dev server) in the container to port 3000 on your machine
+    networks:
+      - webmypham-network
+    # depends_on:
+    #   - webmypham-server # Uncomment if the client depends on the server
+volumes:
+  webmypham-postgres-volume:
+networks:
+  webmypham-network:

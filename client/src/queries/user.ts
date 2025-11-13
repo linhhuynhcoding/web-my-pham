@@ -19,7 +19,7 @@ export const useProfileInfo = (options?: { enabled?: boolean }) => {
 
 export const useUserOrders = (
   pagination?: Pagination,
-  options?: { enabled?: boolean }
+  options?: { enabled?: boolean } 
 ) => {
   return useQuery({
     queryKey: userKeys.orders(pagination),

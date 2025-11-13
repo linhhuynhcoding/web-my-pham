@@ -61,6 +61,36 @@ service Service {
       get: "/api/orders_history"
     };
   }
+
+  // Load Cart Page
+  rpc LoadCartPage(LoadCartPageRequest) returns (LoadCartPageResponse) {
+    option (google.api.http) = {
+      get: "/api/cart"
+    };
+  }
+
+  // Add Cart Item
+  rpc AddCartItem(AddCartItemRequest) returns (AddCartItemResponse) {
+    option (google.api.http) = {
+      post: "/api/cart/items"
+      body: "*"
+    };
+  }
+
+  // Update Cart Item
+  rpc UpdateCartItem(UpdateCartItemRequest) returns (UpdateCartItemResponse) {
+    option (google.api.http) = {
+      put: "/api/cart/items/{cart_item_id}"
+      body: "*"
+    };
+  }
+
+  // Delete Cart Item
+  rpc DeleteCartItem(DeleteCartItemRequest) returns (DeleteCartItemResponse) {
+    option (google.api.http) = {
+      delete: "/api/cart/items/{cart_item_id}"
+    };
+  }
 }
 
 message LoginRequest {
@@ -144,4 +174,41 @@ message LoadUserOrderPageRequest {
 message LoadUserOrderPageResponse {
   repeated Order orders = 1;
   Pagination pagination = 2;
+}
+
+message LoadCartPageRequest {
+  // No specific request parameters needed for loading the current user's cart.
+}
+
+message LoadCartPageResponse {
+  repeated CartItem items = 1;
+  double total_price = 2;
+  double check_out_bill = 3;
+}
+
+message AddCartItemRequest {
+  int32 product_id = 1 [(validate.rules).int32.gt = 0];
+  int32 quantity = 2 [(validate.rules).int32.gt = 0];
+}
+
+message AddCartItemResponse {
+  CartItem item = 1;
+}
+
+
+message UpdateCartItemRequest {
+  int32 cart_item_id = 1 [(validate.rules).int32.gt = 0];
+  int32 quantity = 2 [(validate.rules).int32.gt = 0];
+}
+
+message UpdateCartItemResponse {
+  CartItem item = 1;
+}
+
+message DeleteCartItemRequest {
+  int32 cart_item_id = 1 [(validate.rules).int32.gt = 0];
+}
+
+message DeleteCartItemResponse {
+
 }

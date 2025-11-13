@@ -37,22 +37,22 @@ export const loadProductsByCategory = async (
   const baseUrl = envConfig.VITE_API_BASE_URL;
   const params = new URLSearchParams();
 
-  if (filter?.price_range) {
-    params.append('filter.price_range.min', String(filter.price_range.min));
-    params.append('filter.price_range.max', String(filter.price_range.max));
+  if (filter?.priceRange) {
+    params.append('filter.priceRange.min', String(filter.priceRange.min));
+    params.append('filter.priceRange.max', String(filter.priceRange.max));
   }
 
-  if (filter?.brand_ids) {
-    filter.brand_ids.forEach((id) => params.append('filter.brand_ids', String(id)));
+  if (filter?.brandIds) {
+    filter.brandIds.forEach((id) => params.append('filter.brandIds', String(id)));
   }
 
   if (orderBy !== undefined) {
-    params.append('order_by', String(orderBy));
+    params.append('orderBy', String(orderBy));
   }
 
   if (pagination) {
-    params.append('pagination.current_page', String(pagination.current_page));
-    params.append('pagination.page_size', String(pagination.page_size));
+    params.append('pagination.currentPage', String(pagination.currentPage));
+    params.append('pagination.pageSize', String(pagination.pageSize));
   }
 
   const response = await fetch(

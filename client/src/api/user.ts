@@ -33,8 +33,8 @@ export const loadUserOrderPage = async (
   const params = new URLSearchParams();
 
   if (pagination) {
-    params.append('pagination.current_page', String(pagination.current_page));
-    params.append('pagination.page_size', String(pagination.page_size));
+    params.append('pagination.currentPage', String(pagination.currentPage));
+    params.append('pagination.pageSize', String(pagination.pageSize));
   }
 
   const response = await fetch(

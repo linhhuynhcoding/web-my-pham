@@ -23,7 +23,7 @@ CREATE TABLE "products" (
   "category_id" int NOT NULL,
   "stock" int NOT NULL,
   "buyturn" int NOT NULL,
-  "image_url" string NOT NULL,
+  "image_url" VARCHAR NOT NULL,
   "brand_id" int NOT NULL,
   "created_at" timestamp,
   "updated_at" timestamp
@@ -79,7 +79,7 @@ ALTER TABLE "cart_items" ADD FOREIGN KEY ("cart_id") REFERENCES "carts" ("id");
 
 ALTER TABLE "cart_items" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id");
 
-ALTER TABLE "orders" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+ALTER TABLE "orders" ADD FOREIGN KEY ("user_email") REFERENCES "users" ("email");
 
 ALTER TABLE "order_items" ADD FOREIGN KEY ("order_id") REFERENCES "orders" ("id");
 

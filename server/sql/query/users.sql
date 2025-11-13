@@ -11,7 +11,7 @@ select * from users where email = @email;
 -- name: UpsertUSer :one
 insert into users (name, email, password, role)
 values ($1, $2, $3, $4)
-on conflict do update
+on conflict (email) do update
 set name = $1, email = $2, password = $3, role = $4
 returning *;
 

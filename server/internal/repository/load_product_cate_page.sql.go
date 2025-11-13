@@ -12,48 +12,56 @@ import (
 )
 
 const getProductByCategoryID = `-- name: GetProductByCategoryID :many
-with res as ( select 
-    p.id, p.name, p.description, p.price, p.category_id, p.stock, p.buyturn, p.image_url, p.brand_id, p.created_at, p.updated_at, 
-    brands.id as brand_id,
-    brands.name as brand_name, 
-    brands.image_url as brand_image_url,
-    categories.name as category_name, 
-    categories.id as category_id,
-    categories.image_url as category_image_url
-from products p
-left join brands on brands.id = p.brand_id
-left join categories on categories.id = p.category_id       
-		-- 1. price (desc, asc)
-		-- 2. buyturn (desc)
-where (
+WITH res AS (
+  SELECT
+    p.id, p.name, p.description, p.price, p.category_id, p.stock, p.buyturn, p.image_url, p.brand_id, p.created_at, p.updated_at,
+    b.name AS brand_name,
+    b.image_url AS brand_image_url,
+    c.name AS category_name,
+    c.image_url AS category_image_url
+  FROM products p
+  LEFT JOIN brands b ON b.id = p.brand_id
+  LEFT JOIN categories c ON c.id = p.category_id
+  WHERE
     (
-        $3 is null
-        or $4 is null
-        or (p.price between $3 and $4)
+      $4::decimal(10,2) IS NULL
+      OR $5::decimal(10,2) IS NULL
+      OR p.price BETWEEN $4::decimal(10,2)
+                    AND $5::decimal(10,2)
     )
-    and p.category_id = $5
-    and p.stock > 0
-    and (
-        array_length($6, 1) = 0
-        or p.brand_id = any($6)
+    AND p.category_id = $6
+    AND p.stock > 0
+    AND (
+      $7::int[] IS NULL
+      OR array_length($7::int[], 1) = 0
+      OR p.brand_id = ANY($7::int[])
     )
 )
-order by 
-    case when $7 = 'price_asc' then p.price end asc,
-    case when $7 = 'price_desc' then p.price end desc,
-    case when $7 = 'buyturn' then p.buyturn end desc )
-select id, name, description, price, res.category_id, stock, buyturn, image_url, res.brand_id, created_at, updated_at, res.brand_id, brand_name, brand_image_url, category_name, res.category_id, category_image_url, count(*) over() as total from res
-limit $1 offset $2
+SELECT
+  id, name, description, price, category_id, stock, buyturn, image_url, brand_id, created_at, updated_at, brand_name, brand_image_url, category_name, category_image_url,
+  COUNT(*) OVER() AS total
+FROM res
+ORDER BY
+  CASE $1
+    WHEN 'price_asc'  THEN res.price
+  END ASC,
+  CASE $1
+    WHEN 'price_desc' THEN res.price
+  END DESC,
+  CASE $1
+    WHEN 'buyturn'    THEN res.buyturn
+  END DESC
+LIMIT $3 OFFSET $2
 `
 
 type GetProductByCategoryIDParams struct {
-	Limit      int32       `json:"limit"`
-	Offset     int32       `json:"offset"`
-	PriceMin   interface{} `json:"price_min"`
-	PriceMax   interface{} `json:"price_max"`
-	CategoryID int32       `json:"category_id"`
-	BrandID    interface{} `json:"brand_id"`
-	SortBy     interface{} `json:"sort_by"`
+	SortBy     interface{}    `json:"sort_by"`
+	Offset     int32          `json:"offset"`
+	Limit      int32          `json:"limit"`
+	PriceMin   pgtype.Numeric `json:"price_min"`
+	PriceMax   pgtype.Numeric `json:"price_max"`
+	CategoryID int32          `json:"category_id"`
+	BrandID    []int32        `json:"brand_id"`
 }
 
 type GetProductByCategoryIDRow struct {
@@ -68,28 +76,22 @@ type GetProductByCategoryIDRow struct {
 	BrandID          int32            `json:"brand_id"`
 	CreatedAt        pgtype.Timestamp `json:"created_at"`
 	UpdatedAt        pgtype.Timestamp `json:"updated_at"`
-	BrandID_2        pgtype.Int4      `json:"brand_id_2"`
 	BrandName        pgtype.Text      `json:"brand_name"`
 	BrandImageUrl    pgtype.Text      `json:"brand_image_url"`
 	CategoryName     pgtype.Text      `json:"category_name"`
-	CategoryID_2     pgtype.Int4      `json:"category_id_2"`
 	CategoryImageUrl pgtype.Text      `json:"category_image_url"`
 	Total            *int64           `json:"total"`
 }
 
-// - categoryID = $1
-// - price = [$2, $3]
-// - limit, offset
-// - order by
 func (q *Queries) GetProductByCategoryID(ctx context.Context, arg GetProductByCategoryIDParams) ([]GetProductByCategoryIDRow, error) {
 	rows, err := q.db.Query(ctx, getProductByCategoryID,
-		arg.Limit,
+		arg.SortBy,
 		arg.Offset,
+		arg.Limit,
 		arg.PriceMin,
 		arg.PriceMax,
 		arg.CategoryID,
 		arg.BrandID,
-		arg.SortBy,
 	)
 	if err != nil {
 		return nil, err
@@ -110,11 +112,9 @@ func (q *Queries) GetProductByCategoryID(ctx context.Context, arg GetProductByCa
 			&i.BrandID,
 			&i.CreatedAt,
 			&i.UpdatedAt,
-			&i.BrandID_2,
 			&i.BrandName,
 			&i.BrandImageUrl,
 			&i.CategoryName,
-			&i.CategoryID_2,
 			&i.CategoryImageUrl,
 			&i.Total,
 		); err != nil {

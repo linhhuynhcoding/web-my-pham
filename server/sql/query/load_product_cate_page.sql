@@ -1,37 +1,41 @@
 -- name: GetProductByCategoryID :many
-with res as ( select 
-    p.*, 
-    brands.id as brand_id,
-    brands.name as brand_name, 
-    brands.image_url as brand_image_url,
-    categories.name as category_name, 
-    categories.id as category_id,
-    categories.image_url as category_image_url
-from products p
-left join brands on brands.id = p.brand_id
-left join categories on categories.id = p.category_id       
--- - categoryID = $1
--- - price = [$2, $3]
--- - limit, offset
--- - order by 
-		-- 1. price (desc, asc)
-		-- 2. buyturn (desc)
-where (
+WITH res AS (
+  SELECT
+    p.*,
+    b.name AS brand_name,
+    b.image_url AS brand_image_url,
+    c.name AS category_name,
+    c.image_url AS category_image_url
+  FROM products p
+  LEFT JOIN brands b ON b.id = p.brand_id
+  LEFT JOIN categories c ON c.id = p.category_id
+  WHERE
     (
-        sqlc.narg('price_min') is null
-        or sqlc.narg('price_max') is null
-        or (p.price between sqlc.arg('price_min') and sqlc.arg('price_max'))
+      sqlc.narg('price_min')::decimal(10,2) IS NULL
+      OR sqlc.narg('price_max')::decimal(10,2) IS NULL
+      OR p.price BETWEEN sqlc.narg('price_min')::decimal(10,2)
+                    AND sqlc.narg('price_max')::decimal(10,2)
     )
-    and p.category_id = sqlc.arg('category_id')
-    and p.stock > 0
-    and (
-        array_length(sqlc.arg('brand_id'), 1) = 0
-        or p.brand_id = any(sqlc.arg('brand_id'))
+    AND p.category_id = sqlc.arg('category_id')
+    AND p.stock > 0
+    AND (
+      sqlc.narg('brand_id')::int[] IS NULL
+      OR array_length(sqlc.narg('brand_id')::int[], 1) = 0
+      OR p.brand_id = ANY(sqlc.narg('brand_id')::int[])
     )
 )
-order by 
-    case when sqlc.arg('sort_by') = 'price_asc' then p.price end asc,
-    case when sqlc.arg('sort_by') = 'price_desc' then p.price end desc,
-    case when sqlc.arg('sort_by') = 'buyturn' then p.buyturn end desc )
-select *, count(*) over() as total from res
-limit $1 offset $2;
+SELECT
+  *,
+  COUNT(*) OVER() AS total
+FROM res
+ORDER BY
+  CASE sqlc.arg('sort_by')
+    WHEN 'price_asc'  THEN res.price
+  END ASC,
+  CASE sqlc.arg('sort_by')
+    WHEN 'price_desc' THEN res.price
+  END DESC,
+  CASE sqlc.arg('sort_by')
+    WHEN 'buyturn'    THEN res.buyturn
+  END DESC
+LIMIT sqlc.arg('limit') OFFSET sqlc.arg('offset');

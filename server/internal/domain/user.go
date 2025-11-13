@@ -8,6 +8,7 @@ import (
 	"github.com/linhhuynhcoding/web-my-pham/server/pkg/config"
 	"github.com/linhhuynhcoding/web-my-pham/server/pkg/consts"
 	jwtUtils "github.com/linhhuynhcoding/web-my-pham/server/utils/jwt"
+	"go.uber.org/zap"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -20,16 +21,19 @@ var (
 
 type UserHelper struct {
 	*repository.User
-	cfg *config.Config
+	cfg    *config.Config
+	logger *zap.Logger
 }
 
 func NewUserHelper(
 	user *repository.User,
 	cfg *config.Config,
+	logger *zap.Logger,
 ) *UserHelper {
 	return &UserHelper{
-		User: user,
-		cfg:  cfg,
+		User:   user,
+		cfg:    cfg,
+		logger: logger,
 	}
 }
 
@@ -38,8 +42,9 @@ func (u *UserHelper) ValidatePassword(pwd string) error {
 	if err != nil {
 		return err
 	}
+	u.logger.Info("Debug Validate Password", zap.String("password", string(u.Password)), zap.String("pwd", string(hashedPassword)))
 
-	err = bcrypt.CompareHashAndPassword(hashedPassword, []byte(u.Password))
+	err = bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(pwd))
 	return err
 }
 
@@ -51,7 +56,7 @@ func (u *UserHelper) GenerateAccessToken() (string, error) {
 	claim := NewAccessTokenClaim(u.ID, u.Email, u.Role, *u.cfg)
 
 	accessToken, err := jwtUtils.GenerateNewToken(jwtUtils.JwtOpts{
-		Key:           u.cfg.TokenConfig.AccessSecretKey,
+		Key:           []byte(u.cfg.TokenConfig.AccessSecretKey),
 		SigningMethod: *DefaultSigningMethod,
 		Claims:        claim,
 	})

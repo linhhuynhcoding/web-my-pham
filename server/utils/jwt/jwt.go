@@ -1,8 +1,6 @@
 package jwt
 
 import (
-	"log"
-
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -24,7 +22,7 @@ func ValidateToken(tokenString string, opts JwtOpts) (jwt.MapClaims, error) {
 		return opts.Key, nil
 	}, jwt.WithValidMethods([]string{opts.SigningMethod.Alg()}))
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	if claims, ok := token.Claims.(jwt.MapClaims); ok {
 		return claims, nil
