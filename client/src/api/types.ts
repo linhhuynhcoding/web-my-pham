@@ -156,3 +156,33 @@ export interface AddCartItemRequest {
 export interface AddCartItemResponse {
   item: CartItem;
 }
+
+export interface LoadCheckoutPageRequest {
+  cartItemIds?: number[];
+}
+
+export interface OrderInfo {
+  items: CartItem[];
+  shippingFee: number;
+  totalPrice: number;
+}
+
+export enum PaymentMethodType {
+  PAYMENT_METHOD_TYPE_UNSPECIFIED = 0,
+  CASH_ON_DELIVERY = 1,
+  VNPAY = 2,
+}
+
+export interface PaymentMethod {
+  type: PaymentMethodType;
+  name: string;
+}
+
+export interface OrderDetailForm {
+  availablePaymentMethods: PaymentMethod[];
+}
+
+export interface LoadCheckoutPageResponse {
+  orderInfo: OrderInfo;
+  orderDetailForm: OrderDetailForm;
+}

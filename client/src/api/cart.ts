@@ -9,7 +9,7 @@ import {
   UpdateCartItemResponse,
 } from './types';
 
-const getAuthHeaders = () => {
+export const getAuthHeaders = () => {
   const token = localStorage.getItem('accessToken');
   if (!token) {
     throw new Error('No access token found');
@@ -20,7 +20,7 @@ const getAuthHeaders = () => {
   };
 };
 
-const handleResponse = async (response: Response) => {
+export const handleResponse = async (response: Response) => {
   if (!response.ok) {
     const errorData = await response
       .json()

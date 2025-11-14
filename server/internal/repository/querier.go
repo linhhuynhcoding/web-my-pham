@@ -14,6 +14,7 @@ type Querier interface {
 	AddCartItem(ctx context.Context, arg AddCartItemParams) (CartItem, error)
 	CreateUserCart(ctx context.Context, userID pgtype.Int4) error
 	DeleteCartItem(ctx context.Context, id int32) error
+	FetchProductToCheckout(ctx context.Context, Items []int32) ([]FetchProductToCheckoutRow, error)
 	GetAllUsers(ctx context.Context, arg GetAllUsersParams) ([]User, error)
 	// order by buyturn
 	// stock > 0

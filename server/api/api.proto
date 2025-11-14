@@ -91,6 +91,14 @@ service Service {
       delete: "/api/cart/items/{cart_item_id}"
     };
   }
+
+  // Load Checkout Page
+  rpc LoadCheckoutPage(LoadCheckoutPageRequest) returns (LoadCheckoutPageResponse) {
+    option (google.api.http) = {
+      post: "/api/checkout/load"
+      body: "*"
+    };
+  }
 }
 
 message LoginRequest {
@@ -211,4 +219,34 @@ message DeleteCartItemRequest {
 
 message DeleteCartItemResponse {
 
+}
+
+message LoadCheckoutPageRequest {
+  repeated int32 cart_item_ids = 1 [(validate.rules).repeated .min_items = 1];
+}
+
+message OrderInfo {
+  repeated CartItem items = 1;
+  double shipping_fee = 2;
+  double total_price = 3;
+}
+
+enum PaymentMethodType {
+  PAYMENT_METHOD_TYPE_UNSPECIFIED = 0;
+  CASH_ON_DELIVERY = 1;
+  VNPAY = 2;
+}
+
+message PaymentMethod {
+  PaymentMethodType type = 1;
+  string name = 2;
+}
+
+message OrderDetailForm {
+  repeated PaymentMethod available_payment_methods = 1;
+}
+
+message LoadCheckoutPageResponse {
+  OrderInfo order_info = 1;
+  OrderDetailForm order_detail_form = 2;
 }

@@ -3389,3 +3389,651 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DeleteCartItemResponseValidationError{}
+
+// Validate checks the field values on LoadCheckoutPageRequest with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *LoadCheckoutPageRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on LoadCheckoutPageRequest with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// LoadCheckoutPageRequestMultiError, or nil if none found.
+func (m *LoadCheckoutPageRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *LoadCheckoutPageRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if len(m.GetCartItemIds()) < 1 {
+		err := LoadCheckoutPageRequestValidationError{
+			field:  "CartItemIds",
+			reason: "value must contain at least 1 item(s)",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if len(errors) > 0 {
+		return LoadCheckoutPageRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// LoadCheckoutPageRequestMultiError is an error wrapping multiple validation
+// errors returned by LoadCheckoutPageRequest.ValidateAll() if the designated
+// constraints aren't met.
+type LoadCheckoutPageRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m LoadCheckoutPageRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m LoadCheckoutPageRequestMultiError) AllErrors() []error { return m }
+
+// LoadCheckoutPageRequestValidationError is the validation error returned by
+// LoadCheckoutPageRequest.Validate if the designated constraints aren't met.
+type LoadCheckoutPageRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e LoadCheckoutPageRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e LoadCheckoutPageRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e LoadCheckoutPageRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e LoadCheckoutPageRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e LoadCheckoutPageRequestValidationError) ErrorName() string {
+	return "LoadCheckoutPageRequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e LoadCheckoutPageRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sLoadCheckoutPageRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = LoadCheckoutPageRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = LoadCheckoutPageRequestValidationError{}
+
+// Validate checks the field values on OrderInfo with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *OrderInfo) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on OrderInfo with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in OrderInfoMultiError, or nil
+// if none found.
+func (m *OrderInfo) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *OrderInfo) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetItems() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, OrderInfoValidationError{
+						field:  fmt.Sprintf("Items[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, OrderInfoValidationError{
+						field:  fmt.Sprintf("Items[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return OrderInfoValidationError{
+					field:  fmt.Sprintf("Items[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	// no validation rules for ShippingFee
+
+	// no validation rules for TotalPrice
+
+	if len(errors) > 0 {
+		return OrderInfoMultiError(errors)
+	}
+
+	return nil
+}
+
+// OrderInfoMultiError is an error wrapping multiple validation errors returned
+// by OrderInfo.ValidateAll() if the designated constraints aren't met.
+type OrderInfoMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m OrderInfoMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m OrderInfoMultiError) AllErrors() []error { return m }
+
+// OrderInfoValidationError is the validation error returned by
+// OrderInfo.Validate if the designated constraints aren't met.
+type OrderInfoValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e OrderInfoValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e OrderInfoValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e OrderInfoValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e OrderInfoValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e OrderInfoValidationError) ErrorName() string { return "OrderInfoValidationError" }
+
+// Error satisfies the builtin error interface
+func (e OrderInfoValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sOrderInfo.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = OrderInfoValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = OrderInfoValidationError{}
+
+// Validate checks the field values on PaymentMethod with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *PaymentMethod) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PaymentMethod with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PaymentMethodMultiError, or
+// nil if none found.
+func (m *PaymentMethod) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PaymentMethod) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Type
+
+	// no validation rules for Name
+
+	if len(errors) > 0 {
+		return PaymentMethodMultiError(errors)
+	}
+
+	return nil
+}
+
+// PaymentMethodMultiError is an error wrapping multiple validation errors
+// returned by PaymentMethod.ValidateAll() if the designated constraints
+// aren't met.
+type PaymentMethodMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PaymentMethodMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PaymentMethodMultiError) AllErrors() []error { return m }
+
+// PaymentMethodValidationError is the validation error returned by
+// PaymentMethod.Validate if the designated constraints aren't met.
+type PaymentMethodValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PaymentMethodValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PaymentMethodValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PaymentMethodValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PaymentMethodValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PaymentMethodValidationError) ErrorName() string { return "PaymentMethodValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PaymentMethodValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPaymentMethod.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PaymentMethodValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PaymentMethodValidationError{}
+
+// Validate checks the field values on OrderDetailForm with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *OrderDetailForm) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on OrderDetailForm with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// OrderDetailFormMultiError, or nil if none found.
+func (m *OrderDetailForm) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *OrderDetailForm) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetAvailablePaymentMethods() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, OrderDetailFormValidationError{
+						field:  fmt.Sprintf("AvailablePaymentMethods[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, OrderDetailFormValidationError{
+						field:  fmt.Sprintf("AvailablePaymentMethods[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return OrderDetailFormValidationError{
+					field:  fmt.Sprintf("AvailablePaymentMethods[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return OrderDetailFormMultiError(errors)
+	}
+
+	return nil
+}
+
+// OrderDetailFormMultiError is an error wrapping multiple validation errors
+// returned by OrderDetailForm.ValidateAll() if the designated constraints
+// aren't met.
+type OrderDetailFormMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m OrderDetailFormMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m OrderDetailFormMultiError) AllErrors() []error { return m }
+
+// OrderDetailFormValidationError is the validation error returned by
+// OrderDetailForm.Validate if the designated constraints aren't met.
+type OrderDetailFormValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e OrderDetailFormValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e OrderDetailFormValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e OrderDetailFormValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e OrderDetailFormValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e OrderDetailFormValidationError) ErrorName() string { return "OrderDetailFormValidationError" }
+
+// Error satisfies the builtin error interface
+func (e OrderDetailFormValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sOrderDetailForm.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = OrderDetailFormValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = OrderDetailFormValidationError{}
+
+// Validate checks the field values on LoadCheckoutPageResponse with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *LoadCheckoutPageResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on LoadCheckoutPageResponse with the
+// rules defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// LoadCheckoutPageResponseMultiError, or nil if none found.
+func (m *LoadCheckoutPageResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *LoadCheckoutPageResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetOrderInfo()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, LoadCheckoutPageResponseValidationError{
+					field:  "OrderInfo",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, LoadCheckoutPageResponseValidationError{
+					field:  "OrderInfo",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetOrderInfo()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return LoadCheckoutPageResponseValidationError{
+				field:  "OrderInfo",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetOrderDetailForm()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, LoadCheckoutPageResponseValidationError{
+					field:  "OrderDetailForm",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, LoadCheckoutPageResponseValidationError{
+					field:  "OrderDetailForm",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetOrderDetailForm()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return LoadCheckoutPageResponseValidationError{
+				field:  "OrderDetailForm",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return LoadCheckoutPageResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// LoadCheckoutPageResponseMultiError is an error wrapping multiple validation
+// errors returned by LoadCheckoutPageResponse.ValidateAll() if the designated
+// constraints aren't met.
+type LoadCheckoutPageResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m LoadCheckoutPageResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m LoadCheckoutPageResponseMultiError) AllErrors() []error { return m }
+
+// LoadCheckoutPageResponseValidationError is the validation error returned by
+// LoadCheckoutPageResponse.Validate if the designated constraints aren't met.
+type LoadCheckoutPageResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e LoadCheckoutPageResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e LoadCheckoutPageResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e LoadCheckoutPageResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e LoadCheckoutPageResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e LoadCheckoutPageResponseValidationError) ErrorName() string {
+	return "LoadCheckoutPageResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e LoadCheckoutPageResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sLoadCheckoutPageResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = LoadCheckoutPageResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = LoadCheckoutPageResponseValidationError{}

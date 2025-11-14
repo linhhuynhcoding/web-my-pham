@@ -16,6 +16,7 @@ import { CategoryProductPage } from './pages/CategoryProductPage';
 // import { ProductDetailPage } from './pages/ProductDetailPage';
 import { CartPage } from './pages/CardPage';
 import { RegisterPage } from './pages/RegisterPage';
+import { CheckoutPage } from './pages/CheckoutPage';
 // import { PrivateRoute } from './components/PrivateRoute';
 // Create a client for React Query
 const queryClient = new QueryClient();
@@ -47,10 +48,10 @@ const router = createBrowserRouter([
         path: "/cart",
         element: <CartPage />,
       },
-      // {
-      //   path: "/product/:productId",
-      //   element: <ProductDetailPage />,
-      // }
+      {
+        path: "/checkout/:cartItems",
+        element: <CheckoutPage />,
+      }
     ],
   },
 ]);
