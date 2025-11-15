@@ -37,9 +37,11 @@ export const loadProductsByCategory = async (
   const baseUrl = envConfig.VITE_API_BASE_URL;
   const params = new URLSearchParams();
 
+  console.log(filter)
+
   if (filter?.priceRange) {
-    params.append('filter.priceRange.min', String(filter.priceRange.min));
-    params.append('filter.priceRange.max', String(filter.priceRange.max));
+    params.append('filter.priceRange.min', String(filter.priceRange.min ?? 0));
+    params.append('filter.priceRange.max', String(filter.priceRange.max ?? 100000000000));
   }
 
   if (filter?.brandIds) {

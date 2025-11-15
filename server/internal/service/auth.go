@@ -57,6 +57,7 @@ func (s *Service) Login(ctx context.Context, req *api.LoginRequest) (*api.LoginR
 		User: &api.User{
 			Name:  user.Name,
 			Email: user.Email,
+			Role:  user.Role,
 		},
 	}, nil
 }

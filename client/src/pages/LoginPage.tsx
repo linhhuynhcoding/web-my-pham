@@ -10,7 +10,7 @@ export const LoginPage = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const { login } = useAuth();
+    const { setIsAuthenticated, setIsAdmin } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -21,7 +21,13 @@ export const LoginPage = () => {
         try {
             const response = await apiLogin({ email, password });
             localStorage.setItem('accessToken', response.accessToken);
-            login();
+            setIsAuthenticated(true);
+            console.log(response.user)
+            if (response.user.role.toLowerCase() == "admin") {
+                console.log("admin")
+                setIsAdmin(true);
+                navigate("/admin");
+            }
             navigate("/");
         } catch (err) {
             setError("Login failed. Please check your password.");

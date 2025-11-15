@@ -17,13 +17,23 @@ import { CategoryProductPage } from './pages/CategoryProductPage';
 import { CartPage } from './pages/CardPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { CheckoutPage } from './pages/CheckoutPage';
+import { OrderSuccessPage } from './pages/OrderSuccessPage';
+import { AdminLayout, AdminRoute } from './components/AdminRoute';
+import AdminDashboardPage from './pages/AdminDashboardPage';
+import { PrivateRoute } from './components/PrivateRoute';
+import { ManageAccountPage } from './pages/ManageAccountPage';
+import { ManageOrderPage } from './pages/ManageOrderPage';
+import { ManageProductPage } from './pages/ManageProductPage';
+import { ProductDetailPage } from './pages/ProductDetailPage';
+import { Toaster } from 'react-hot-toast';
+import { CartProvider } from './context/CartContext';
+
 // import { PrivateRoute } from './components/PrivateRoute';
 // Create a client for React Query
 const queryClient = new QueryClient();
 
 
 const router = createBrowserRouter([
-
   {
     path: "/",
     element: <App />,
@@ -46,22 +56,56 @@ const router = createBrowserRouter([
       },
       {
         path: "/cart",
-        element: <CartPage />,
+        element: <PrivateRoute><CartPage /></PrivateRoute>,
       },
       {
         path: "/checkout/:cartItems",
         element: <CheckoutPage />,
+      },
+      {
+        path: "/order-success/:orderId",
+        element: <OrderSuccessPage />,
+      },
+      {
+        path: "/product/:productId",
+        element: <ProductDetailPage />,
       }
     ],
   },
+  {
+    path: "/admin",
+    element: <AdminRoute><AdminLayout></AdminLayout></AdminRoute>,
+    children: [
+      {
+        path: "/admin/dashboard",
+        element: <AdminDashboardPage />,
+      },
+      {
+        path: "/admin/products",
+        element: <ManageProductPage />,
+      },
+      {
+        path: "/admin/orders",
+        element: <ManageOrderPage />,
+      },
+      {
+        path: "/admin/accounts",
+        element: <ManageAccountPage />,
+      }
+
+    ]
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <AuthProvider>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <CartProvider>
+          <RouterProvider router={router} />
+        </CartProvider>
+      </AuthProvider>
+      <Toaster />
+    </QueryClientProvider>
   </React.StrictMode>,
 );

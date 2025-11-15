@@ -1,9 +1,14 @@
+import { useAuth } from "@/context/authContext";
+import { useCart } from "@/context/CartContext";
 import { motion } from "framer-motion";
 import { Search, User, ShoppingCart, MapPin, Phone, ShieldCheck, Store } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 export const Header = () => {
   const { i18n } = useTranslation();
+  const { isAuthenticated } = useAuth();
+  const { cartItems } = useCart();
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     i18n.changeLanguage(e.target.value);
@@ -20,15 +25,17 @@ export const Header = () => {
       <div className="py-3">
         <div className="max-w-[60%] mx-auto flex items-center justify-between px-8">
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <div className="bg-white text-green-800 rounded-full w-9 h-9 flex items-center justify-center font-bold text-lg">
-              L
+          <Link to="/">
+            <div className="flex items-center gap-2">
+              <div className="bg-white text-green-800 rounded-full w-9 h-9 flex items-center justify-center font-bold text-lg">
+                L
+              </div>
+              <div>
+                <p className="text-xl font-semibold tracking-wide">LASAKI.VN</p>
+                <p className="text-xs text-gray-100">Chất lượng thật - Giá trị thật!</p>
+              </div>
             </div>
-            <div>
-              <p className="text-xl font-semibold tracking-wide">LASAKI.VN</p>
-              <p className="text-xs text-gray-100">Chất lượng thật - Giá trị thật!</p>
-            </div>
-          </div>
+          </Link>
 
           {/* Search Bar */}
           <div className="flex-1 mx-8">
@@ -44,9 +51,17 @@ export const Header = () => {
 
           {/* Actions */}
           <div className="flex items-center gap-6 text-sm">
-            <div className="flex items-center gap-1">
-              <User size={20} />
-              <span>Đăng nhập / Đăng ký</span>
+            <div className="flex items-center gap-1 cursor-pointer ">
+              {
+                !isAuthenticated ?
+                  <Link to="/login" className="">
+                    <User size={20} />
+                    <span>Đăng nhập / Đăng ký</span>
+                  </Link>
+                  : <Link to="/profile" className="">
+                    <User size={20} />
+                  </Link>
+              }
             </div>
             <div className="flex items-center gap-1">
               <Store size={20} />
@@ -61,8 +76,10 @@ export const Header = () => {
               <span>Hỗ trợ</span>
             </div>
             <div className="relative">
-              <ShoppingCart size={22} />
-              <span className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">0</span>
+              <Link to="/cart" className="flex items-center gap-1">
+                <ShoppingCart size={22} />
+                <span className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">{cartItems.length}</span>
+              </Link>
             </div>
           </div>
         </div>

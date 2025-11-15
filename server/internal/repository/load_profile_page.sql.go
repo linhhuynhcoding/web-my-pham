@@ -90,7 +90,7 @@ func (q *Queries) GetOrderDetailByID(ctx context.Context, orderID []int32) ([]Ge
 
 const getOrderHistoryByUserEmail = `-- name: GetOrderHistoryByUserEmail :many
 select
-    o.id, o.user_email, o.total_price, o.status, o.shipping_address, o.phone, o.payment_method, o.order_date, o.created_at, o.updated_at,
+    o.id, o.user_email, o.total_price, o.shipping_fee, o.status, o.shipping_address, o.phone, o.payment_method, o.order_date, o.created_at, o.updated_at, o.notes,
     count (*) over () as total
 from orders o
 where o.user_email = $1
@@ -108,6 +108,7 @@ type GetOrderHistoryByUserEmailRow struct {
 	ID              int32            `json:"id"`
 	UserEmail       string           `json:"user_email"`
 	TotalPrice      pgtype.Numeric   `json:"total_price"`
+	ShippingFee     pgtype.Numeric   `json:"shipping_fee"`
 	Status          string           `json:"status"`
 	ShippingAddress string           `json:"shipping_address"`
 	Phone           string           `json:"phone"`
@@ -115,6 +116,7 @@ type GetOrderHistoryByUserEmailRow struct {
 	OrderDate       pgtype.Date      `json:"order_date"`
 	CreatedAt       pgtype.Timestamp `json:"created_at"`
 	UpdatedAt       pgtype.Timestamp `json:"updated_at"`
+	Notes           pgtype.Text      `json:"notes"`
 	Total           *int64           `json:"total"`
 }
 
@@ -135,6 +137,7 @@ func (q *Queries) GetOrderHistoryByUserEmail(ctx context.Context, arg GetOrderHi
 			&i.ID,
 			&i.UserEmail,
 			&i.TotalPrice,
+			&i.ShippingFee,
 			&i.Status,
 			&i.ShippingAddress,
 			&i.Phone,
@@ -142,6 +145,7 @@ func (q *Queries) GetOrderHistoryByUserEmail(ctx context.Context, arg GetOrderHi
 			&i.OrderDate,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.Notes,
 			&i.Total,
 		); err != nil {
 			return nil, err

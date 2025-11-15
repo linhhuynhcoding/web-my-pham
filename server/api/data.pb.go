@@ -23,6 +23,55 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type PaymentMethodType int32
+
+const (
+	PaymentMethodType_PAYMENT_METHOD_TYPE_UNSPECIFIED PaymentMethodType = 0
+	PaymentMethodType_CASH_ON_DELIVERY                PaymentMethodType = 1
+	PaymentMethodType_VNPAY                           PaymentMethodType = 2
+)
+
+// Enum value maps for PaymentMethodType.
+var (
+	PaymentMethodType_name = map[int32]string{
+		0: "PAYMENT_METHOD_TYPE_UNSPECIFIED",
+		1: "CASH_ON_DELIVERY",
+		2: "VNPAY",
+	}
+	PaymentMethodType_value = map[string]int32{
+		"PAYMENT_METHOD_TYPE_UNSPECIFIED": 0,
+		"CASH_ON_DELIVERY":                1,
+		"VNPAY":                           2,
+	}
+)
+
+func (x PaymentMethodType) Enum() *PaymentMethodType {
+	p := new(PaymentMethodType)
+	*p = x
+	return p
+}
+
+func (x PaymentMethodType) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (PaymentMethodType) Descriptor() protoreflect.EnumDescriptor {
+	return file_data_proto_enumTypes[0].Descriptor()
+}
+
+func (PaymentMethodType) Type() protoreflect.EnumType {
+	return &file_data_proto_enumTypes[0]
+}
+
+func (x PaymentMethodType) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use PaymentMethodType.Descriptor instead.
+func (PaymentMethodType) EnumDescriptor() ([]byte, []int) {
+	return file_data_proto_rawDescGZIP(), []int{0}
+}
+
 type Pagination struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	CurrentPage   int32                  `protobuf:"varint,1,opt,name=current_page,json=currentPage,proto3" json:"current_page,omitempty"`
@@ -522,7 +571,7 @@ func (x *CartItem) GetProduct() *Product {
 type Order struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	Id              int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	UserId          int32                  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserEmail       string                 `protobuf:"bytes,2,opt,name=user_email,json=userEmail,proto3" json:"user_email,omitempty"`
 	TotalPrice      float64                `protobuf:"fixed64,3,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"`
 	Status          string                 `protobuf:"bytes,4,opt,name=status,proto3" json:"status,omitempty"`
 	ShippingAddress string                 `protobuf:"bytes,5,opt,name=shipping_address,json=shippingAddress,proto3" json:"shipping_address,omitempty"`
@@ -531,6 +580,10 @@ type Order struct {
 	UpdatedAt       *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	Items           []*OrderItem           `protobuf:"bytes,9,rep,name=items,proto3" json:"items,omitempty"`
 	User            *User                  `protobuf:"bytes,10,opt,name=user,proto3" json:"user,omitempty"`
+	PaymentMethod   *PaymentMethod         `protobuf:"bytes,11,opt,name=payment_method,json=paymentMethod,proto3" json:"payment_method,omitempty"`
+	ShippingFee     float64                `protobuf:"fixed64,12,opt,name=shipping_fee,json=shippingFee,proto3" json:"shipping_fee,omitempty"`
+	Notes           string                 `protobuf:"bytes,13,opt,name=notes,proto3" json:"notes,omitempty"`
+	OrderDate       *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=order_date,json=orderDate,proto3" json:"order_date,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -572,11 +625,11 @@ func (x *Order) GetId() int32 {
 	return 0
 }
 
-func (x *Order) GetUserId() int32 {
+func (x *Order) GetUserEmail() string {
 	if x != nil {
-		return x.UserId
+		return x.UserEmail
 	}
-	return 0
+	return ""
 }
 
 func (x *Order) GetTotalPrice() float64 {
@@ -631,6 +684,34 @@ func (x *Order) GetItems() []*OrderItem {
 func (x *Order) GetUser() *User {
 	if x != nil {
 		return x.User
+	}
+	return nil
+}
+
+func (x *Order) GetPaymentMethod() *PaymentMethod {
+	if x != nil {
+		return x.PaymentMethod
+	}
+	return nil
+}
+
+func (x *Order) GetShippingFee() float64 {
+	if x != nil {
+		return x.ShippingFee
+	}
+	return 0
+}
+
+func (x *Order) GetNotes() string {
+	if x != nil {
+		return x.Notes
+	}
+	return ""
+}
+
+func (x *Order) GetOrderDate() *timestamppb.Timestamp {
+	if x != nil {
+		return x.OrderDate
 	}
 	return nil
 }
@@ -787,6 +868,58 @@ func (x *Brand) GetBgUrl() string {
 	return ""
 }
 
+type PaymentMethod struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Type          PaymentMethodType      `protobuf:"varint,1,opt,name=type,proto3,enum=api.PaymentMethodType" json:"type,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PaymentMethod) Reset() {
+	*x = PaymentMethod{}
+	mi := &file_data_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PaymentMethod) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PaymentMethod) ProtoMessage() {}
+
+func (x *PaymentMethod) ProtoReflect() protoreflect.Message {
+	mi := &file_data_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PaymentMethod.ProtoReflect.Descriptor instead.
+func (*PaymentMethod) Descriptor() ([]byte, []int) {
+	return file_data_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *PaymentMethod) GetType() PaymentMethodType {
+	if x != nil {
+		return x.Type
+	}
+	return PaymentMethodType_PAYMENT_METHOD_TYPE_UNSPECIFIED
+}
+
+func (x *PaymentMethod) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
 var File_data_proto protoreflect.FileDescriptor
 
 const file_data_proto_rawDesc = "" +
@@ -842,10 +975,11 @@ const file_data_proto_rawDesc = "" +
 	"product_id\x18\x03 \x01(\x05R\tproductId\x12\x1a\n" +
 	"\bquantity\x18\x04 \x01(\x05R\bquantity\x12\x1a\n" +
 	"\bsubtotal\x18\x05 \x01(\x01R\bsubtotal\x12&\n" +
-	"\aproduct\x18\x06 \x01(\v2\f.api.ProductR\aproduct\"\xe5\x02\n" +
+	"\aproduct\x18\x06 \x01(\v2\f.api.ProductR\aproduct\"\x9a\x04\n" +
 	"\x05Order\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\x05R\x06userId\x12\x1f\n" +
+	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x1d\n" +
+	"\n" +
+	"user_email\x18\x02 \x01(\tR\tuserEmail\x12\x1f\n" +
 	"\vtotal_price\x18\x03 \x01(\x01R\n" +
 	"totalPrice\x12\x16\n" +
 	"\x06status\x18\x04 \x01(\tR\x06status\x12)\n" +
@@ -857,7 +991,12 @@ const file_data_proto_rawDesc = "" +
 	"updated_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12$\n" +
 	"\x05items\x18\t \x03(\v2\x0e.api.OrderItemR\x05items\x12\x1d\n" +
 	"\x04user\x18\n" +
-	" \x01(\v2\t.api.UserR\x04user\"\xaf\x01\n" +
+	" \x01(\v2\t.api.UserR\x04user\x129\n" +
+	"\x0epayment_method\x18\v \x01(\v2\x12.api.PaymentMethodR\rpaymentMethod\x12!\n" +
+	"\fshipping_fee\x18\f \x01(\x01R\vshippingFee\x12\x14\n" +
+	"\x05notes\x18\r \x01(\tR\x05notes\x129\n" +
+	"\n" +
+	"order_date\x18\x0e \x01(\v2\x1a.google.protobuf.TimestampR\torderDate\"\xaf\x01\n" +
 	"\tOrderItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x19\n" +
 	"\border_id\x18\x02 \x01(\x05R\aorderId\x12\x1d\n" +
@@ -870,7 +1009,14 @@ const file_data_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1b\n" +
 	"\timage_url\x18\x03 \x01(\tR\bimageUrl\x12\x15\n" +
-	"\x06bg_url\x18\x04 \x01(\tR\x05bgUrlB3Z1github.com/linhhuynhcoding/web-my-pham/server/apib\x06proto3"
+	"\x06bg_url\x18\x04 \x01(\tR\x05bgUrl\"O\n" +
+	"\rPaymentMethod\x12*\n" +
+	"\x04type\x18\x01 \x01(\x0e2\x16.api.PaymentMethodTypeR\x04type\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name*Y\n" +
+	"\x11PaymentMethodType\x12#\n" +
+	"\x1fPAYMENT_METHOD_TYPE_UNSPECIFIED\x10\x00\x12\x14\n" +
+	"\x10CASH_ON_DELIVERY\x10\x01\x12\t\n" +
+	"\x05VNPAY\x10\x02B3Z1github.com/linhhuynhcoding/web-my-pham/server/apib\x06proto3"
 
 var (
 	file_data_proto_rawDescOnce sync.Once
@@ -884,39 +1030,45 @@ func file_data_proto_rawDescGZIP() []byte {
 	return file_data_proto_rawDescData
 }
 
-var file_data_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_data_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_data_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_data_proto_goTypes = []any{
-	(*Pagination)(nil),            // 0: api.Pagination
-	(*User)(nil),                  // 1: api.User
-	(*Category)(nil),              // 2: api.Category
-	(*Product)(nil),               // 3: api.Product
-	(*Cart)(nil),                  // 4: api.Cart
-	(*CartItem)(nil),              // 5: api.CartItem
-	(*Order)(nil),                 // 6: api.Order
-	(*OrderItem)(nil),             // 7: api.OrderItem
-	(*Brand)(nil),                 // 8: api.Brand
-	(*timestamppb.Timestamp)(nil), // 9: google.protobuf.Timestamp
+	(PaymentMethodType)(0),        // 0: api.PaymentMethodType
+	(*Pagination)(nil),            // 1: api.Pagination
+	(*User)(nil),                  // 2: api.User
+	(*Category)(nil),              // 3: api.Category
+	(*Product)(nil),               // 4: api.Product
+	(*Cart)(nil),                  // 5: api.Cart
+	(*CartItem)(nil),              // 6: api.CartItem
+	(*Order)(nil),                 // 7: api.Order
+	(*OrderItem)(nil),             // 8: api.OrderItem
+	(*Brand)(nil),                 // 9: api.Brand
+	(*PaymentMethod)(nil),         // 10: api.PaymentMethod
+	(*timestamppb.Timestamp)(nil), // 11: google.protobuf.Timestamp
 }
 var file_data_proto_depIdxs = []int32{
-	9,  // 0: api.Category.created_at:type_name -> google.protobuf.Timestamp
-	2,  // 1: api.Product.category:type_name -> api.Category
-	8,  // 2: api.Product.brand:type_name -> api.Brand
-	9,  // 3: api.Product.created_at:type_name -> google.protobuf.Timestamp
-	9,  // 4: api.Product.updated_at:type_name -> google.protobuf.Timestamp
-	9,  // 5: api.Cart.created_at:type_name -> google.protobuf.Timestamp
-	9,  // 6: api.Cart.updated_at:type_name -> google.protobuf.Timestamp
-	5,  // 7: api.Cart.items:type_name -> api.CartItem
-	3,  // 8: api.CartItem.product:type_name -> api.Product
-	9,  // 9: api.Order.created_at:type_name -> google.protobuf.Timestamp
-	9,  // 10: api.Order.updated_at:type_name -> google.protobuf.Timestamp
-	7,  // 11: api.Order.items:type_name -> api.OrderItem
-	1,  // 12: api.Order.user:type_name -> api.User
-	3,  // 13: api.OrderItem.product:type_name -> api.Product
-	14, // [14:14] is the sub-list for method output_type
-	14, // [14:14] is the sub-list for method input_type
-	14, // [14:14] is the sub-list for extension type_name
-	14, // [14:14] is the sub-list for extension extendee
-	0,  // [0:14] is the sub-list for field type_name
+	11, // 0: api.Category.created_at:type_name -> google.protobuf.Timestamp
+	3,  // 1: api.Product.category:type_name -> api.Category
+	9,  // 2: api.Product.brand:type_name -> api.Brand
+	11, // 3: api.Product.created_at:type_name -> google.protobuf.Timestamp
+	11, // 4: api.Product.updated_at:type_name -> google.protobuf.Timestamp
+	11, // 5: api.Cart.created_at:type_name -> google.protobuf.Timestamp
+	11, // 6: api.Cart.updated_at:type_name -> google.protobuf.Timestamp
+	6,  // 7: api.Cart.items:type_name -> api.CartItem
+	4,  // 8: api.CartItem.product:type_name -> api.Product
+	11, // 9: api.Order.created_at:type_name -> google.protobuf.Timestamp
+	11, // 10: api.Order.updated_at:type_name -> google.protobuf.Timestamp
+	8,  // 11: api.Order.items:type_name -> api.OrderItem
+	2,  // 12: api.Order.user:type_name -> api.User
+	10, // 13: api.Order.payment_method:type_name -> api.PaymentMethod
+	11, // 14: api.Order.order_date:type_name -> google.protobuf.Timestamp
+	4,  // 15: api.OrderItem.product:type_name -> api.Product
+	0,  // 16: api.PaymentMethod.type:type_name -> api.PaymentMethodType
+	17, // [17:17] is the sub-list for method output_type
+	17, // [17:17] is the sub-list for method input_type
+	17, // [17:17] is the sub-list for extension type_name
+	17, // [17:17] is the sub-list for extension extendee
+	0,  // [0:17] is the sub-list for field type_name
 }
 
 func init() { file_data_proto_init() }
@@ -929,13 +1081,14 @@ func file_data_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_data_proto_rawDesc), len(file_data_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   9,
+			NumEnums:      1,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_data_proto_goTypes,
 		DependencyIndexes: file_data_proto_depIdxs,
+		EnumInfos:         file_data_proto_enumTypes,
 		MessageInfos:      file_data_proto_msgTypes,
 	}.Build()
 	File_data_proto = out.File

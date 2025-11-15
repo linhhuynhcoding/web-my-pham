@@ -1,27 +1,48 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { useLoadCheckout } from "../queries/checkout";
+import { useNavigate, useParams } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { CardSolid } from "../components/CardSolid";
+import { PaymentMethodType, PlaceOrderResponse } from "../api/types";
+import { usePlaceOrder } from "@/queries/usePlaceOrder";
+import { useLoadCheckout } from "../queries/checkout";
 
 export const CheckoutPage = () => {
     const { cartItems: encodedItemIds } = useParams<{ cartItems: string }>();
+    const navigate = useNavigate();
     const { data: checkoutData, isLoading, error } = useLoadCheckout(encodedItemIds);
+    const { placeOrder, isLoading: isPlacingOrder, error: placeOrderError } = usePlaceOrder(
+        (_data: PlaceOrderResponse) => {
+            if (!_data) {
+                return;
+            }
+            console.log(_data);
+            navigate(`/order-success/${_data?.orderInfo?.id}`);
+        },
+    );
 
     const [address, setAddress] = useState('');
+    const [phone, setPhone] = useState('');
     const [notes, setNotes] = useState('');
-    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string | null>(null);
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethodType | null>(null);
 
     const handlePlaceOrder = (e: React.FormEvent) => {
         e.preventDefault();
-        // TODO: Implement order placement logic
-        console.log({
-            address,
-            notes,
-            selectedPaymentMethod,
-            items: checkoutData?.orderInfo.items,
+        if (!checkoutData || !selectedPaymentMethod) {
+            alert("Please fill all required fields and select a payment method.");
+            return;
+        }
+
+        const cartItemIds = checkoutData.orderInfo.items?.map((item) => item.id) ?? [];
+
+        placeOrder({
+            order_detail_form: {
+                address,
+                phone,
+                notes,
+                payment_method: selectedPaymentMethod,
+            },
+            cart_item_ids: cartItemIds,
         });
-        alert('Order placed! (See console for details)');
     };
 
     if (isLoading) {
@@ -58,6 +79,17 @@ export const CheckoutPage = () => {
                             />
                         </div>
                         <div>
+                            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                            <input
+                                type="tel"
+                                id="phone"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                className="w-full border border-gray-300 rounded-md p-2"
+                                required
+                            />
+                        </div>
+                        <div>
                             <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">Notes (Optional)</label>
                             <textarea
                                 id="notes"
@@ -73,8 +105,8 @@ export const CheckoutPage = () => {
                                 {orderDetailForm?.availablePaymentMethods.map((method) => (
                                     <div
                                         key={method.type}
-                                        onClick={() => setSelectedPaymentMethod(method.name)}
-                                        className={`max-w-[200px] min-h-[100px] p-4 border rounded-md cursor-pointer transition-all ${selectedPaymentMethod === method.name ? 'border-indigo-600 ring-2 ring-indigo-200' : 'border-gray-300'
+                                        onClick={() => setSelectedPaymentMethod(method.type)}
+                                        className={`max-w-[200px] min-h-[100px] p-4 border rounded-md cursor-pointer transition-all ${selectedPaymentMethod === method.type ? 'border-indigo-600 ring-2 ring-indigo-200' : 'border-gray-300'
                                             }`}
                                     >
                                         <p className="font-semibold">{method.name}</p>
@@ -82,6 +114,9 @@ export const CheckoutPage = () => {
                                 ))}
                             </div>
                         </div>
+                        {placeOrderError && (
+                            <p className="text-red-500 text-sm text-center">{placeOrderError.message}</p>
+                        )}
                     </CardSolid>
                 </div>
 
@@ -90,7 +125,7 @@ export const CheckoutPage = () => {
                     <CardSolid className="p-6">
                         <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
                         <div className="space-y-4">
-                            {orderInfo?.items.map((item) => (
+                            {orderInfo?.items?.map((item) => (
                                 <div key={item.id} className="flex justify-between items-center text-sm">
                                     <span className="font-medium">{item.product.name} x {item.quantity}</span>
                                     <span className="text-gray-600">${item.subtotal.toFixed(2)}</span>
@@ -100,15 +135,20 @@ export const CheckoutPage = () => {
                         <div className="border-t mt-4 pt-4 space-y-2">
                             <div className="flex justify-between text-sm">
                                 <span>Shipping Fee</span>
-                                <span>${orderInfo?.shippingFee.toFixed(2)}</span>
+                                <span>${orderInfo?.shippingFee?.toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between font-bold text-lg">
                                 <span>Total Amount</span>
-                                <span>${orderInfo?.totalPrice.toFixed(2)}</span>
+                                <span>${orderInfo?.totalPrice?.toFixed(2)}</span>
                             </div>
                         </div>
-                        <button type="submit" className="w-full mt-6 bg-indigo-600 text-white py-3 rounded-md font-semibold hover:bg-indigo-700 transition-colors">
-                            Place Order
+                        <button type="submit" disabled={isPlacingOrder} className="w-full mt-6 bg-indigo-600 text-white py-3 rounded-md font-semibold hover:bg-indigo-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center">
+                            {isPlacingOrder ? (
+                                <>
+                                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                                    Placing Order...
+                                </>
+                            ) : "Place Order"}
                         </button>
                     </CardSolid>
                 </div>

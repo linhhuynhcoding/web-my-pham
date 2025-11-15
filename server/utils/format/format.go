@@ -118,6 +118,13 @@ func PgDateToStringPointer(pgD pgtype.Date) *string {
 	return nil
 }
 
+func PgDateToPbTimestamp(pgD pgtype.Date) *timestamppb.Timestamp {
+	if pgD.Valid {
+		return timestamppb.New(pgD.Time)
+	}
+	return nil
+}
+
 func StringDateToPgDate(dateStr string) pgtype.Date {
 	date, err := time.Parse(consts.DATE_STRING_LAYOUT, dateStr)
 	if err != nil {

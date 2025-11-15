@@ -40,6 +40,7 @@ type Order struct {
 	ID              int32            `json:"id"`
 	UserEmail       string           `json:"user_email"`
 	TotalPrice      pgtype.Numeric   `json:"total_price"`
+	ShippingFee     pgtype.Numeric   `json:"shipping_fee"`
 	Status          string           `json:"status"`
 	ShippingAddress string           `json:"shipping_address"`
 	Phone           string           `json:"phone"`
@@ -47,6 +48,7 @@ type Order struct {
 	OrderDate       pgtype.Date      `json:"order_date"`
 	CreatedAt       pgtype.Timestamp `json:"created_at"`
 	UpdatedAt       pgtype.Timestamp `json:"updated_at"`
+	Notes           pgtype.Text      `json:"notes"`
 }
 
 type OrderItem struct {

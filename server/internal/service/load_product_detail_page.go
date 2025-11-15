@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/linhhuynhcoding/web-my-pham/server/api"
+	"github.com/linhhuynhcoding/web-my-pham/server/internal/repository"
 	"github.com/linhhuynhcoding/web-my-pham/server/utils/format"
 	"go.uber.org/zap"
 )
@@ -42,7 +43,37 @@ func (s *Service) LoadProductDetailPage(ctx context.Context, req *api.LoadProduc
 		logger.Error("failed to get product price", zap.Error(err))
 	}
 
-	
+	productBrands, err := s.store.GetProductByBrandID(ctx, repository.GetProductByBrandIDParams{
+		BrandID: product.BrandID,
+		Limit:   5,
+		Offset:  0,
+	})
+	if err != nil {
+		logger.Error("failed to get product brands", zap.Error(err))
+	}
+
+	productCategories, err := s.store.GetProductByCateID(ctx, repository.GetProductByCateIDParams{
+		CategoryID: product.CategoryID,
+		Limit:      5,
+		Offset:     0,
+	})
+	if err != nil {
+		logger.Error("failed to get product categories", zap.Error(err))
+	}
+
+	ortherProductBrands := make([]*api.Product, 0, len(productBrands))
+	for _, productBrand := range productBrands {
+		ortherProductBrands = append(ortherProductBrands, s.products2ProductsApi(productBrand))
+	}
+	ortherProductCategories := make([]*api.Product, 0, len(productCategories))
+	for _, productCategory := range productCategories {
+		ortherProductCategories = append(ortherProductCategories, &api.Product{
+			Id:       productCategory.ID,
+			Name:     productCategory.Name,
+			ImageUrl: productCategory.ImageUrl,
+			Price:    productPrice.Float64,
+		})
+	}
 
 	return &api.LoadProductDetailPageResponse{
 		Product: &api.Product{

@@ -11,6 +11,7 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/linhhuynhcoding/web-my-pham/server/api"
+	"github.com/linhhuynhcoding/web-my-pham/server/internal/adapter/cloudinary"
 	"github.com/linhhuynhcoding/web-my-pham/server/internal/repository"
 	"github.com/linhhuynhcoding/web-my-pham/server/internal/service"
 	"github.com/linhhuynhcoding/web-my-pham/server/pkg/config"
@@ -63,6 +64,7 @@ func ServerCommand() {
 			zap.NewProduction,
 			NewDb,
 			service.NewService,
+			cloudinary.NewCloudinaryClient,
 		),
 
 		fx.Invoke(runServer),
@@ -110,6 +112,8 @@ func runServer(
 			AllowCredentials: true,
 		})
 		handler := c.Handler(mux)
+
+		mux.HandlePath("POST", "/v1/upload", service.UploadFileHTTP)
 
 		log.Info("gRPC-Gateway listening", zap.Any("port", cfg.HttpPort))
 		if err := http.ListenAndServe(fmt.Sprintf(":%v", cfg.HttpPort), handler); err != nil {

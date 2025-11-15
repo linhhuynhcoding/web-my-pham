@@ -10,12 +10,24 @@ import (
 )
 
 func (s *Service) buildPagination(pagination *api.Pagination, total int32) *api.Pagination {
+	var (
+		currentPage int32
+		pageSize    int32
+	)
+	if pagination == nil {
+		currentPage = consts.DEFAULT_PAGE
+		pageSize = consts.DEFAULT_PAGE_SIZE
+	} else {
+		currentPage = pagination.CurrentPage
+		pageSize = pagination.PageSize
+	}
+
 	return &api.Pagination{
-		CurrentPage: pagination.CurrentPage + 1,
-		PageSize:    pagination.PageSize,
+		CurrentPage: currentPage + 1,
+		PageSize:    pageSize,
 		Total:       total,
-		LastPage:    (total / pagination.PageSize),
-		HasNextPage: (total / pagination.PageSize) >= pagination.CurrentPage+1,
+		LastPage:    (total / pageSize),
+		HasNextPage: (total / pageSize) >= currentPage+1,
 	}
 }
 

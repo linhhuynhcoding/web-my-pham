@@ -7,7 +7,50 @@ package repository
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
+
+const countBrands = `-- name: CountBrands :one
+SELECT count(*) FROM brands
+`
+
+func (q *Queries) CountBrands(ctx context.Context) (*int64, error) {
+	row := q.db.QueryRow(ctx, countBrands)
+	var count *int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const createBrand = `-- name: CreateBrand :one
+INSERT INTO brands (
+  name,
+  image_url
+) VALUES (
+  $1, $2
+) RETURNING id, name, image_url
+`
+
+type CreateBrandParams struct {
+	Name     pgtype.Text `json:"name"`
+	ImageUrl pgtype.Text `json:"image_url"`
+}
+
+func (q *Queries) CreateBrand(ctx context.Context, arg CreateBrandParams) (Brand, error) {
+	row := q.db.QueryRow(ctx, createBrand, arg.Name, arg.ImageUrl)
+	var i Brand
+	err := row.Scan(&i.ID, &i.Name, &i.ImageUrl)
+	return i, err
+}
+
+const deleteBrand = `-- name: DeleteBrand :exec
+DELETE FROM brands WHERE id = $1
+`
+
+func (q *Queries) DeleteBrand(ctx context.Context, id int32) error {
+	_, err := q.db.Exec(ctx, deleteBrand, id)
+	return err
+}
 
 const getBrands = `-- name: GetBrands :many
 select id, name, image_url from brands
@@ -31,4 +74,53 @@ func (q *Queries) GetBrands(ctx context.Context) ([]Brand, error) {
 		return nil, err
 	}
 	return items, nil
+}
+
+const listBrands = `-- name: ListBrands :many
+SELECT id, name, image_url FROM brands
+ORDER BY id
+LIMIT $1
+OFFSET $2
+`
+
+type ListBrandsParams struct {
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
+}
+
+func (q *Queries) ListBrands(ctx context.Context, arg ListBrandsParams) ([]Brand, error) {
+	rows, err := q.db.Query(ctx, listBrands, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Brand{}
+	for rows.Next() {
+		var i Brand
+		if err := rows.Scan(&i.ID, &i.Name, &i.ImageUrl); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const updateBrand = `-- name: UpdateBrand :one
+UPDATE brands SET name = $2, image_url = $3 WHERE id = $1 RETURNING id, name, image_url
+`
+
+type UpdateBrandParams struct {
+	ID       int32       `json:"id"`
+	Name     pgtype.Text `json:"name"`
+	ImageUrl pgtype.Text `json:"image_url"`
+}
+
+func (q *Queries) UpdateBrand(ctx context.Context, arg UpdateBrandParams) (Brand, error) {
+	row := q.db.QueryRow(ctx, updateBrand, arg.ID, arg.Name, arg.ImageUrl)
+	var i Brand
+	err := row.Scan(&i.ID, &i.Name, &i.ImageUrl)
+	return i, err
 }

@@ -12,32 +12,88 @@ import (
 
 type Querier interface {
 	AddCartItem(ctx context.Context, arg AddCartItemParams) (CartItem, error)
+	CountBrands(ctx context.Context) (*int64, error)
+	CountCategories(ctx context.Context) (*int64, error)
+	CountOrders(ctx context.Context, arg CountOrdersParams) (*int64, error)
+	CreateBrand(ctx context.Context, arg CreateBrandParams) (Brand, error)
+	CreateCategory(ctx context.Context, arg CreateCategoryParams) (Category, error)
+	CreateOrder(ctx context.Context, arg CreateOrderParams) (Order, error)
+	CreateOrderItem(ctx context.Context, arg CreateOrderItemParams) (OrderItem, error)
+	CreateProduct(ctx context.Context, arg CreateProductParams) (Product, error)
 	CreateUserCart(ctx context.Context, userID pgtype.Int4) error
+	DeleteBrand(ctx context.Context, id int32) error
 	DeleteCartItem(ctx context.Context, id int32) error
+	DeleteCategory(ctx context.Context, id int32) error
+	// insert into products(
+	//     id,
+	//     name,
+	//     description,
+	//     price,
+	//     image_url,
+	//     stock,
+	//     brand_id,
+	//     category_id,
+	//     buyturn
+	// ) values (
+	//     sqlc.arg('id'),
+	//     sqlc.narg('name'),
+	//     sqlc.narg('description'),
+	//     sqlc.narg('price'),
+	//     sqlc.narg('image_url'),
+	//     sqlc.narg('stock'),
+	//     sqlc.narg('brand_id'),
+	//     sqlc.narg('category_id'),
+	//     sqlc.narg('buyturn')
+	// )
+	// on conflict (id) do update
+	// set
+	//     name = COALESCE(EXCLUDED.name, products.name),
+	//     description = COALESCE(EXCLUDED.description, products.description),
+	//     price = COALESCE(EXCLUDED.price, products.price),
+	//     image_url = COALESCE(EXCLUDED.image_url, products.image_url),
+	//     stock = COALESCE(EXCLUDED.stock, products.stock),
+	//     brand_id = COALESCE(EXCLUDED.brand_id, products.brand_id),
+	//     category_id = COALESCE(EXCLUDED.category_id, products.category_id),
+	//     buyturn = COALESCE(EXCLUDED.buyturn, products.buyturn);
+	DeleteProduct(ctx context.Context, id int32) error
 	FetchProductToCheckout(ctx context.Context, Items []int32) ([]FetchProductToCheckoutRow, error)
-	GetAllUsers(ctx context.Context, arg GetAllUsersParams) ([]User, error)
+	GetAllUsers(ctx context.Context, arg GetAllUsersParams) ([]GetAllUsersRow, error)
 	// order by buyturn
 	// stock > 0
 	// limit $1
 	GetBestSellerProducts(ctx context.Context, limit int32) ([]GetBestSellerProductsRow, error)
 	GetBrands(ctx context.Context) ([]Brand, error)
 	GetCartByUserId(ctx context.Context, userID pgtype.Int4) ([]GetCartByUserIdRow, error)
+	GetCartItem(ctx context.Context, id int32) (CartItem, error)
 	GetCategories(ctx context.Context) ([]Category, error)
+	GetOrderDetail(ctx context.Context, orderID int32) (GetOrderDetailRow, error)
 	GetOrderDetailByID(ctx context.Context, orderID []int32) ([]GetOrderDetailByIDRow, error)
 	// - group by user_id
 	// - user_id = $1
 	// - limit, offset
 	// - order by
 	GetOrderHistoryByUserEmail(ctx context.Context, arg GetOrderHistoryByUserEmailParams) ([]GetOrderHistoryByUserEmailRow, error)
+	GetOrderItems(ctx context.Context, orderID pgtype.Int4) ([]GetOrderItemsRow, error)
 	GetProductByBrandID(ctx context.Context, arg GetProductByBrandIDParams) ([]GetProductByBrandIDRow, error)
+	GetProductByCateID(ctx context.Context, arg GetProductByCateIDParams) ([]Product, error)
 	GetProductByCategoryID(ctx context.Context, arg GetProductByCategoryIDParams) ([]GetProductByCategoryIDRow, error)
 	GetProductByCategoryIDBasic(ctx context.Context, arg GetProductByCategoryIDBasicParams) ([]GetProductByCategoryIDBasicRow, error)
 	GetProductByID(ctx context.Context, id int32) (GetProductByIDRow, error)
+	GetProductDetail(ctx context.Context, id int32) (GetProductDetailRow, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByName(ctx context.Context, name string) (User, error)
 	IsCartItemOwner(ctx context.Context, arg IsCartItemOwnerParams) (bool, error)
 	IsUserExist(ctx context.Context, email string) error
+	ListBrands(ctx context.Context, arg ListBrandsParams) ([]Brand, error)
+	ListCategories(ctx context.Context, arg ListCategoriesParams) ([]Category, error)
+	ListOrders(ctx context.Context, arg ListOrdersParams) ([]ListOrdersRow, error)
+	ListProducts(ctx context.Context, arg ListProductsParams) ([]ListProductsRow, error)
+	UpdateBrand(ctx context.Context, arg UpdateBrandParams) (Brand, error)
 	UpdateCartItem(ctx context.Context, arg UpdateCartItemParams) (CartItem, error)
+	UpdateCategory(ctx context.Context, arg UpdateCategoryParams) (Category, error)
+	UpdateOrderStatus(ctx context.Context, arg UpdateOrderStatusParams) (Order, error)
+	UpdateProduct(ctx context.Context, arg UpdateProductParams) error
+	UpdateProductStock(ctx context.Context, arg UpdateProductStockParams) error
 	UpsertUSer(ctx context.Context, arg UpsertUSerParams) (User, error)
 }
 

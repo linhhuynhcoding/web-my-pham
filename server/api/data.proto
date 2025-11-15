@@ -64,7 +64,7 @@ message CartItem {
 
 message Order {
     int32 id = 1;
-    int32 user_id = 2;
+    string user_email = 2;
     double total_price = 3;
     string status = 4;
     string shipping_address = 5;
@@ -73,6 +73,10 @@ message Order {
     google.protobuf.Timestamp updated_at = 8;
     repeated OrderItem items = 9;
     User user = 10;
+    PaymentMethod payment_method = 11;
+    double shipping_fee = 12;
+    string notes = 13;
+    google.protobuf.Timestamp order_date = 14;
 }
 
 message OrderItem {
@@ -89,4 +93,16 @@ message Brand {
     string name = 2;
     string image_url = 3;
     string bg_url = 4;
+}
+
+
+enum PaymentMethodType {
+  PAYMENT_METHOD_TYPE_UNSPECIFIED = 0;
+  CASH_ON_DELIVERY = 1;
+  VNPAY = 2;
+}
+
+message PaymentMethod {
+  PaymentMethodType type = 1;
+  string name = 2;
 }

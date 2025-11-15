@@ -7,10 +7,19 @@ package repository
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const getAllUsers = `-- name: GetAllUsers :many
-select id, name, email, password, role, created_at, updated_at from users
+select 
+    id,
+    name,
+    email,
+    created_at,
+    updated_at,
+    count(*) over () as total
+from users where lower(role) = 'user'
 limit $1 offset $2
 `
 
@@ -19,23 +28,31 @@ type GetAllUsersParams struct {
 	Offset int32 `json:"offset"`
 }
 
-func (q *Queries) GetAllUsers(ctx context.Context, arg GetAllUsersParams) ([]User, error) {
+type GetAllUsersRow struct {
+	ID        int32            `json:"id"`
+	Name      string           `json:"name"`
+	Email     string           `json:"email"`
+	CreatedAt pgtype.Timestamp `json:"created_at"`
+	UpdatedAt pgtype.Timestamp `json:"updated_at"`
+	Total     *int64           `json:"total"`
+}
+
+func (q *Queries) GetAllUsers(ctx context.Context, arg GetAllUsersParams) ([]GetAllUsersRow, error) {
 	rows, err := q.db.Query(ctx, getAllUsers, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []User{}
+	items := []GetAllUsersRow{}
 	for rows.Next() {
-		var i User
+		var i GetAllUsersRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.Name,
 			&i.Email,
-			&i.Password,
-			&i.Role,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.Total,
 		); err != nil {
 			return nil, err
 		}

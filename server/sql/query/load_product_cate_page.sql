@@ -36,6 +36,6 @@ ORDER BY
     WHEN 'price_desc' THEN res.price
   END DESC,
   CASE sqlc.arg('sort_by')
-    WHEN 'buyturn'    THEN res.buyturn
+    WHEN 'best_seller'    THEN res.buyturn
   END DESC
 LIMIT sqlc.arg('limit') OFFSET sqlc.arg('offset');

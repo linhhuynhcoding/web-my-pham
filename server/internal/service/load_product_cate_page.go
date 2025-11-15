@@ -54,8 +54,8 @@ func (s *Service) LoadProductsByCategory(ctx context.Context, req *api.LoadProdu
 		SortBy:     orderBy,
 	}
 	if req.Filter != nil && req.Filter.PriceRange != nil {
-		getProductParams.PriceMax = pgtype.Numeric{Int: big.NewInt(int64(req.Filter.PriceRange.Max))}
-		getProductParams.PriceMin = pgtype.Numeric{Int: big.NewInt(int64(req.Filter.PriceRange.Min))}
+		getProductParams.PriceMax = pgtype.Numeric{Int: big.NewInt(int64(req.Filter.PriceRange.Max)), Valid: true}
+		getProductParams.PriceMin = pgtype.Numeric{Int: big.NewInt(int64(req.Filter.PriceRange.Min)), Valid: true}
 	}
 	if req.Filter != nil && len(req.Filter.BrandIds) > 0 {
 		getProductParams.BrandID = req.Filter.BrandIds
@@ -66,6 +66,7 @@ func (s *Service) LoadProductsByCategory(ctx context.Context, req *api.LoadProdu
 		logger.Error("failed to get products", zap.Error(err))
 		return nil, err
 	}
+	logger.Info("LoadProductsByCategory", zap.Any("products", products), zap.Any("getProductParams", getProductParams))
 
 	brands, err := s.store.GetBrands(ctx)
 	if err != nil && errors.Is(err, sql.ErrNoRows) {

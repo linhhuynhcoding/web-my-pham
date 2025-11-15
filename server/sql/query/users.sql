@@ -1,5 +1,12 @@
 -- name: GetAllUsers :many
-select * from users
+select 
+    id,
+    name,
+    email,
+    created_at,
+    updated_at,
+    count(*) over () as total
+from users where lower(role) = 'user'
 limit $1 offset $2;
 
 -- name: GetUserByName :one

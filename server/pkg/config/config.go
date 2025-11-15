@@ -22,6 +22,14 @@ type Config struct {
 	Token    string `mapstructure:"TOKEN"`
 
 	TokenConfig TokenConfig `mapstructure:"TOKEN_CONFIG"`
+
+	CloudinaryConfig struct {
+		ConnectString string `mapstructure:"CLOUDINARY_URL"`
+		CloudName     string `mapstructure:"CLOUDINARY_NAME"`
+		APIKey        string `mapstructure:"CLOUDINARY_API_KEY"`
+		APISecret     string `mapstructure:"CLOUDINARY_API_SECRET"`
+		UploadFolder  string `mapstructure:"CLOUDINARY_UPLOAD_FOLDER"`
+	} `mapstructure:"CLOUDINARY"`
 }
 
 type CoinMarketCapConfig struct {

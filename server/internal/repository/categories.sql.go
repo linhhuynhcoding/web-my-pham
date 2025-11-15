@@ -7,7 +7,55 @@ package repository
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
+
+const countCategories = `-- name: CountCategories :one
+SELECT count(*) FROM categories
+`
+
+func (q *Queries) CountCategories(ctx context.Context) (*int64, error) {
+	row := q.db.QueryRow(ctx, countCategories)
+	var count *int64
+	err := row.Scan(&count)
+	return count, err
+}
+
+const createCategory = `-- name: CreateCategory :one
+INSERT INTO categories (
+  name,
+  image_url
+) VALUES (
+  $1, $2
+) RETURNING id, name, image_url, created_at
+`
+
+type CreateCategoryParams struct {
+	Name     string      `json:"name"`
+	ImageUrl pgtype.Text `json:"image_url"`
+}
+
+func (q *Queries) CreateCategory(ctx context.Context, arg CreateCategoryParams) (Category, error) {
+	row := q.db.QueryRow(ctx, createCategory, arg.Name, arg.ImageUrl)
+	var i Category
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.ImageUrl,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const deleteCategory = `-- name: DeleteCategory :exec
+DELETE FROM categories WHERE id = $1
+`
+
+func (q *Queries) DeleteCategory(ctx context.Context, id int32) error {
+	_, err := q.db.Exec(ctx, deleteCategory, id)
+	return err
+}
 
 const getCategories = `-- name: GetCategories :many
 select id, name, image_url, created_at from categories
@@ -36,4 +84,63 @@ func (q *Queries) GetCategories(ctx context.Context) ([]Category, error) {
 		return nil, err
 	}
 	return items, nil
+}
+
+const listCategories = `-- name: ListCategories :many
+SELECT id, name, image_url, created_at FROM categories
+ORDER BY id
+LIMIT $1
+OFFSET $2
+`
+
+type ListCategoriesParams struct {
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
+}
+
+func (q *Queries) ListCategories(ctx context.Context, arg ListCategoriesParams) ([]Category, error) {
+	rows, err := q.db.Query(ctx, listCategories, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Category{}
+	for rows.Next() {
+		var i Category
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.ImageUrl,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const updateCategory = `-- name: UpdateCategory :one
+UPDATE categories SET name = $2, image_url = $3 WHERE id = $1 RETURNING id, name, image_url, created_at
+`
+
+type UpdateCategoryParams struct {
+	ID       int32       `json:"id"`
+	Name     string      `json:"name"`
+	ImageUrl pgtype.Text `json:"image_url"`
+}
+
+func (q *Queries) UpdateCategory(ctx context.Context, arg UpdateCategoryParams) (Category, error) {
+	row := q.db.QueryRow(ctx, updateCategory, arg.ID, arg.Name, arg.ImageUrl)
+	var i Category
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.ImageUrl,
+		&i.CreatedAt,
+	)
+	return i, err
 }

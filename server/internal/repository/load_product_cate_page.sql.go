@@ -49,7 +49,7 @@ ORDER BY
     WHEN 'price_desc' THEN res.price
   END DESC,
   CASE $1
-    WHEN 'buyturn'    THEN res.buyturn
+    WHEN 'best_seller'    THEN res.buyturn
   END DESC
 LIMIT $3 OFFSET $2
 `

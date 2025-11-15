@@ -19,3 +19,20 @@ func (q *Queries) CreateUserCart(ctx context.Context, userID pgtype.Int4) error 
 	_, err := q.db.Exec(ctx, createUserCart, userID)
 	return err
 }
+
+const getCartItem = `-- name: GetCartItem :one
+select id, cart_id, product_id, quantity, subtotal from cart_items where id = $1
+`
+
+func (q *Queries) GetCartItem(ctx context.Context, id int32) (CartItem, error) {
+	row := q.db.QueryRow(ctx, getCartItem, id)
+	var i CartItem
+	err := row.Scan(
+		&i.ID,
+		&i.CartID,
+		&i.ProductID,
+		&i.Quantity,
+		&i.Subtotal,
+	)
+	return i, err
+}

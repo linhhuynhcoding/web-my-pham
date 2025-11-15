@@ -14,9 +14,11 @@ export const HomePage = () => {
   const { data, isLoading, error } = useHomeScreen();
 
   const banners = [
-    'https://placehold.co/846x250',
-    'https://placehold.co/846x250',
-    'https://placehold.co/846x250',
+    'https://media.hcdn.vn/hsk/1763115099846x250-37.jpg',
+    'https://media.hcdn.vn/hsk/1763115514846x250-40.jpg',
+    'https://media.hcdn.vn/hsk/1763032632home-30.jpg',
+    'https://media.hcdn.vn/hsk/1763109782home-33.jpg',
+    'https://media.hcdn.vn/hsk/1732069393web.jpg',
   ];
 
   const brandPairs = data?.brands?.reduce((result, value, index, array) => {
@@ -38,14 +40,14 @@ export const HomePage = () => {
 
   // This seems to be static UI content, so I'll leave it as is.
   const features = [
-    { label: "Hasaki Rẻ Hơn", img: "https://via.placeholder.com/64", bg: "bg-pink-100" },
-    { label: "Giao 2H", img: "https://via.placeholder.com/64", bg: "bg-orange-100" },
-    { label: "Nước Hoa Chính Hãng", img: "https://via.placeholder.com/64", bg: "bg-blue-100" },
-    { label: "Clinic & S.P.A", img: "https://via.placeholder.com/64", bg: "bg-green-100" },
-    { label: "Clinic Deals", img: "https://via.placeholder.com/64", bg: "bg-red-100" },
-    { label: "Độc Quyền Hasaki", img: "https://via.placeholder.com/64", bg: "bg-yellow-100" },
-    { label: "Đặt Hẹn", img: "https://via.placeholder.com/64", bg: "bg-purple-100" },
-    { label: "Cẩm Nang", img: "https://via.placeholder.com/64", bg: "bg-blue-50" },
+    { label: "Hasaki Rẻ Hơn", img: "https://media.hcdn.vn/hsk/icon/hsk-icon-2025-11-15-1762941785.png", bg: "bg-pink-100" },
+    { label: "Giao 2H", img: "https://media.hcdn.vn/hsk/icon/hsk-icon-nowfree-v2.png", bg: "bg-orange-100" },
+    { label: "Nước Hoa Chính Hãng", img: "https://media.hcdn.vn/hsk/icon/hsk-icon-perfume-v2.png", bg: "bg-blue-100" },
+    { label: "Clinic & S.P.A", img: "https://media.hcdn.vn/hsk/icon/hasaki-clinic.png", bg: "bg-green-100" },
+    { label: "Clinic Deals", img: "https://media.hcdn.vn/hsk/icon/hsk-icon-clinic-deals-12-12-2024.png", bg: "bg-red-100" },
+    { label: "Độc Quyền Hasaki", img: "https://media.hcdn.vn/hsk/icon/doc-quyen-hasaki.png", bg: "bg-yellow-100" },
+    { label: "Đặt Hẹn", img: "https://media.hcdn.vn/hsk/icon/hasaki-dat-hen.png", bg: "bg-purple-100" },
+    { label: "Cẩm Nang", img: "https://media.hcdn.vn/hsk/icon/hasaki-cam-nang.png", bg: "bg-blue-50" },
   ];
 
   const topSearches = [
@@ -80,7 +82,7 @@ export const HomePage = () => {
       <CardMotion>
         <div className=" flex flex-col w-full bg-white">
           {/* Banner Swiper */}
-          <div className="max-w-[60%] mx-auto grid grid-flow-col-dense grid-cols-5 grid-rows-2 gap-2 items-center">
+          <div className="max-w-[60%] h-full mx-auto grid grid-flow-col-dense grid-cols-5 grid-rows-2 gap-2 items-center">
             <Swiper
               spaceBetween={30}
               centeredSlides={true}
@@ -100,13 +102,13 @@ export const HomePage = () => {
                   <img
                     src={banner}
                     alt={`Banner ${index + 1}`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-fit"
                   />
                 </SwiperSlide>
               ))}
             </Swiper>
-            <div className='col-span-2 bg-amber-500'><img src="https://placehold.co/846x250" alt="" /></div>
-            <div className='col-span-2 bg-amber-500'><img src="https://placehold.co/846x250" alt="" /></div>
+            <div className='col-span-2 bg-amber-500'><img src="https://media.hcdn.vn/hsk/1739420045nowfree-4-846x250-13022025.jpg" alt="" /></div>
+            <div className='col-span-2 bg-amber-500'><img src="https://media.hcdn.vn/hsk/1653555653banner-check-gia-web-v2-435x128.jpg" alt="" /></div>
           </div>
 
           {/* Icon section */}
@@ -117,9 +119,9 @@ export const HomePage = () => {
                 className="flex flex-col items-center text-center cursor-pointer hover:scale-105 transition-transform"
               >
                 <div
-                  className={`w-16 h-16 flex items-center justify-center rounded-full ${item.bg}`}
+                  className={`w-16 h-16 flex items-center justify-center rounded-full `}
                 >
-                  <img src={item.img} alt={item.label} className="w-10 h-10 rounded-full" />
+                  <img src={item.img} alt={item.label} className="w-12 h-12 rounded-xl" />
                 </div>
                 <p className="mt-2 text-sm font-medium text-gray-700">{item.label}</p>
               </div>
@@ -176,7 +178,7 @@ export const HomePage = () => {
         <h2 className='font-bold text-red-700 text-2xl'>Thương hiệu</h2>
         <div className='w-full h-full grid grid-flow-col-dense grid-cols-3 grid-rows-1 gap-4 overflow-visible'>
           <CardSolid className='bg-amber-800 h-full overflow-hidden'>
-            <img src="https://placehold.co/410" className='w-full h-full object-cover' alt="" />
+            <img src="https://media.hcdn.vn/hsk/1763019452popinnisfree1311_img_410x410_8c5088_fit_center.jpg" className='w-full h-full object-cover' alt="" />
           </CardSolid>
           <div className='col-span-2   overflow-visible'>
             <Swiper
@@ -232,13 +234,14 @@ export const HomePage = () => {
       {/* Best Selling Products */}
       <CardSolid className='flex flex-col max-w-[60%] w-full h-full mx-auto rounded-none p-4 gap-2'>
         <h2 className='font-bold text-red-700 text-2xl'>Sản phẩm bán chạy</h2>
-        <div className='w-full h-full overflow-visible'>
+        <div className='w-full h-full overflow-visible items-stretch'>
           <Swiper
             spaceBetween={20}
             slidesPerView={4}
             navigation={true}
+
             modules={[Navigation]}
-            className="w-full h-full"
+            className="w-full h-full justify-stretch items-stretch"
           >
             {data?.bestsellerProducts?.map((product) => (
               <SwiperSlide

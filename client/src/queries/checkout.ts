@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { LoadCheckoutPageResponse } from '../api/types';
-import { loadCheckoutPage } from '../api/checkout';
+import { loadCheckoutPage } from '../api/order';
 
 
 // Custom hook to use in the CheckoutPage component

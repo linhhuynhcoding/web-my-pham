@@ -63,6 +63,8 @@ export interface Order {
   updatedAt: string;
   items: OrderItem[];
   user: User;
+  orderDate: string;
+  userEmail: string;
 }
 
 export interface RegisterRequest {
@@ -82,13 +84,15 @@ export interface LoadHomeScreenResponse {
 }
 
 export interface PriceRange {
-  min: number;
-  max: number;
+  min?: number;
+  max?: number;
 }
 
 export interface ProductFilter {
   priceRange?: PriceRange; 
   brandIds?: number[]; 
+  keyword?: string;
+  categoryIds?: number[];
 }
 
 export enum ProductOrderBy {
@@ -162,9 +166,10 @@ export interface LoadCheckoutPageRequest {
 }
 
 export interface OrderInfo {
-  items: CartItem[];
-  shippingFee: number;
-  totalPrice: number;
+  id?: number;
+  items?: CartItem[];
+  shippingFee?: number;
+  totalPrice?: number;
 }
 
 export enum PaymentMethodType {
@@ -185,4 +190,209 @@ export interface OrderDetailForm {
 export interface LoadCheckoutPageResponse {
   orderInfo: OrderInfo;
   orderDetailForm: OrderDetailForm;
+}
+
+export interface PlaceOrderRequest {
+  order_detail_form: {
+    payment_method: PaymentMethodType;
+    notes: string;
+    address: string;
+    phone: string;
+  };
+  cart_item_ids: number[];
+}
+
+export interface PlaceOrderResponse {
+  orderInfo: OrderInfo;
+}
+
+export interface LoadAccountsRequest {
+  pagination?: Pagination;
+}
+
+export interface LoadAccountsResponse {
+  users: User[];
+  pagination: Pagination;
+}
+
+export interface AmountRange {
+  min?: number;
+  max?: number;
+}
+
+export interface DateRange {
+  startDate?: string;
+  endDate?: string;
+}
+
+export interface AdminOrderFilter {
+  dateRange?: DateRange;
+  totalAmountRange?: AmountRange;
+  userEmail?: string;
+  status?: string;
+  orderId?: number;
+}
+
+export enum AdminOrderOrderBy {
+  ORDER_DATE_DESC = 0,
+  ORDER_DATE_ASC = 1,
+  TOTAL_AMOUNT_DESC = 2,
+  TOTAL_AMOUNT_ASC = 3,
+}
+
+export interface AdminLoadOrdersRequest {
+  pagination?: Pagination;
+  filter?: AdminOrderFilter;
+  orderBy?: AdminOrderOrderBy;
+}
+
+export interface AdminLoadOrdersResponse {
+  orders: Order[];
+  pagination: Pagination;
+}
+
+export interface UpdateOrderStatusRequest {
+  orderId: number;
+  status: string;
+}
+
+export interface UpdateOrderStatusResponse {
+  order: Order;
+}
+
+export interface CreateBrandRequest {
+  name: string;
+  imageUrl?: string;
+}
+
+export interface CreateBrandResponse {
+  brand: Brand;
+}
+
+export interface ListBrandsRequest {
+  pagination?: Pagination;
+}
+
+export interface ListBrandsResponse {
+  brands: Brand[];
+  pagination: Pagination;
+}
+
+export interface UpdateBrandRequest {
+  brandId: number;
+  name?: string;
+  imageUrl?: string;
+}
+
+export interface UpdateBrandResponse {
+  brand: Brand;
+}
+
+export interface DeleteBrandRequest {
+  brandId: number;
+}
+
+export interface DeleteBrandResponse {}
+
+export interface CreateCategoryRequest {
+  name: string;
+  imageUrl?: string;
+}
+
+export interface CreateCategoryResponse {
+  category: Category;
+}
+
+export interface ListCategoriesRequest {
+  pagination?: Pagination;
+}
+
+export interface ListCategoriesResponse {
+  categories: Category[];
+  pagination: Pagination;
+}
+
+export interface UpdateCategoryRequest {
+  categoryId: number;
+  name?: string;
+  imageUrl?: string;
+}
+
+export interface UpdateCategoryResponse {
+  category: Category;
+}
+
+export interface DeleteCategoryRequest {
+  categoryId: number;
+}
+
+export interface DeleteCategoryResponse {}
+
+export interface ListProductRequest {
+  pagination?: Pagination;
+  filter?: ProductFilter;
+  orderBy?: ProductOrderBy;
+}
+
+export interface ListProductResponse {
+  products: Product[];
+  pagination: Pagination;
+}
+
+export interface CreateProductRequest {
+  name?: string;
+  price?: number;
+  description?: string;
+  imageUrl?: string;
+  categoryId?: number;
+  brandId?: number;
+  stock?: number;
+  buyTurn?: number;
+}
+
+export interface CreateProductResponse {
+  product: Product;
+}
+
+export interface UpdateProductRequest {
+  productId: number;
+  name?: string;
+  price?: number;
+  description?: string;
+  imageUrl?: string;
+  categoryId?: number;
+  brandId?: number;
+  stock?: number;
+}
+
+export interface UpdateProductResponse {
+  product: Product;
+}
+
+export interface DeleteProductRequest {
+  productId: number;
+}
+
+export interface DeleteProductResponse {}
+
+export interface GetProductDetailRequest {
+  productId: number;
+}
+
+export interface GetProductDetailResponse {
+  product: Product;
+}
+
+export interface UploadFileRequest {
+  file_data: File;
+}
+
+export interface UploadFileResponse {
+  message: string;
+  fileId: string;
+  file_url: string;
+}
+
+export interface GetOrderResponse {
+  order: Order;
 }
